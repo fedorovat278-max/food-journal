@@ -1,322 +1,176 @@
 <!doctype html>
 <html lang="ru">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#6B5B95">
-  <title>Журнал питания</title>
-  
-  <style>
-    :root{
-      --accent:#6B5B95; --accent2:#EEE9F6; --bg:#F6F7FB; --card:#FFFFFF;
-      --text:#202124; --muted:#6B7280; --line:#E5E7EB; --ok:#E7F6EC;
-      --warn:#FFF7DE; --danger:#FFE7E7;
-    }
-    *{box-sizing:border-box}
-    body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
-    header{position:sticky;top:0;z-index:10;background:var(--accent);color:#fff;padding:14px 16px 12px;box-shadow:0 2px 10px #0002}
-    .top{display:flex;gap:10px;align-items:center;justify-content:space-between}
-    h1{font-size:20px;margin:0}
-    .sub{font-size:12px;opacity:.9;margin-top:3px}
-    main{padding:12px 12px 92px;max-width:760px;margin:auto}
-    .toolbar{display:grid;grid-template-columns:1fr auto;gap:8px;margin-bottom:10px}
-    input,select,button,textarea{font:inherit}
-    input[type=date],select,input[type=text],input[type=number]{width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;background:#fff}
-    button{border:0;border-radius:12px;padding:12px 14px;background:var(--accent);color:#fff;font-weight:700}
-    button.secondary{background:#fff;color:var(--accent);border:1px solid #d8d1e6}
-    button.ghost{background:transparent;color:var(--accent);padding:7px 9px}
-    button.danger{background:#fff;color:#b42318;border:1px solid #f0b9b9}
-    .summary{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:10px 0}
-    .metric{background:#fff;border-radius:14px;padding:10px;text-align:center;box-shadow:0 1px 4px #0001}
-    .metric b{display:block;font-size:18px}.metric span{font-size:11px;color:var(--muted)}
-    .student{background:#fff;border-radius:16px;margin:9px 0;box-shadow:0 1px 5px #0001;overflow:hidden}
-    .student-head{display:flex;align-items:center;gap:10px;padding:12px}
-    .num{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--accent2);color:var(--accent);font-weight:800;font-size:12px;flex:0 0 auto}
-    .name{flex:1;font-weight:700}
-    .total{font-weight:800;color:var(--accent);white-space:nowrap}
-    .expand{background:transparent;color:#555;padding:6px;font-size:20px}
-    .details{display:none;border-top:1px solid var(--line);padding:12px}
-    .student.open .details{display:block}
-    .section-title{font-size:13px;font-weight:800;margin:8px 0 7px;color:#4B5563}
-    .chips{display:flex;flex-wrap:wrap;gap:7px}
-    .chip{border:1px solid #d8d1e6;background:#fff;color:#514264;border-radius:999px;padding:8px 10px;font-size:13px;font-weight:650}
-    .chip.active{background:var(--accent);color:#fff;border-color:var(--accent)}
-    .buffet-row{display:grid;grid-template-columns:1fr 84px;gap:8px;align-items:center;margin:6px 0}
-    .qty{display:grid;grid-template-columns:28px 28px 28px;gap:0;align-items:center;justify-content:end}
-    .qty button{padding:4px;background:#f1eef6;color:var(--accent);border-radius:8px}
-    .qty span{text-align:center;font-weight:700}
-    .comment{margin-top:8px;width:100%;min-height:58px;padding:10px;border:1px solid var(--line);border-radius:10px}
-    nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:8px max(8px,env(safe-area-inset-right)) calc(8px + env(safe-area-inset-bottom));z-index:20}
-    nav button{background:transparent;color:#6B7280;padding:7px 10px;font-size:12px}
-    nav button.active{color:var(--accent)}
-    .page{display:none}.page.active{display:block}
-    .panel{background:#fff;border-radius:16px;padding:13px;margin:10px 0;box-shadow:0 1px 5px #0001}
-    .settings-grid{display:grid;gap:8px}
-    .menu-line{display:grid;grid-template-columns:1fr 95px;gap:8px;margin:7px 0}
-    .small{font-size:12px;color:var(--muted)}
-    .day-row{display:grid;grid-template-columns:100px 1fr auto;gap:8px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line)}
-    .pill{display:inline-block;background:var(--accent2);color:var(--accent);padding:4px 8px;border-radius:999px;font-size:12px;font-weight:700}
-    .empty{color:var(--muted);text-align:center;padding:25px 10px}
-    @media (max-width:420px){.summary{grid-template-columns:repeat(3,1fr)} .metric b{font-size:16px} .metric{padding:8px 5px}}
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#6B5B95">
+<title>Журнал питания</title>
+<link rel="manifest" href="manifest.webmanifest">
+<style>
+:root{--accent:#6B5B95;--accent2:#EEE9F6;--bg:#F6F7FB;--card:#fff;--text:#202124;--muted:#6B7280;--line:#E5E7EB;--danger:#B42318;}
+*{box-sizing:border-box} body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;background:var(--bg);color:var(--text)}
+header{position:sticky;top:0;z-index:10;background:var(--accent);color:#fff;padding:14px 16px 12px;box-shadow:0 2px 10px #0002}
+.top{display:flex;gap:10px;align-items:center;justify-content:space-between} h1{font-size:20px;margin:0} .sub{font-size:12px;opacity:.9;margin-top:3px}
+main{padding:12px 12px 92px;max-width:760px;margin:auto}
+input,select,button,textarea{font:inherit} input[type=date],input[type=text],input[type=number],select{width:100%;padding:12px;border:1px solid var(--line);border-radius:12px;background:#fff}
+button{border:0;border-radius:12px;padding:12px 14px;background:var(--accent);color:#fff;font-weight:700}
+button.secondary{background:#fff;color:var(--accent);border:1px solid #d8d1e6} button.danger{background:#fff;color:var(--danger);border:1px solid #efc0c0}
+.toolbar{display:grid;grid-template-columns:1fr auto;gap:8px;margin-bottom:10px}
+.summary{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:10px 0}
+.metric{background:#fff;border-radius:14px;padding:9px 5px;text-align:center;box-shadow:0 1px 4px #0001} .metric b{display:block;font-size:17px} .metric span{font-size:10px;color:var(--muted)}
+.student{background:#fff;border-radius:16px;margin:9px 0;box-shadow:0 1px 5px #0001;overflow:hidden}
+.student-head{display:flex;align-items:center;gap:10px;padding:12px} .num{width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--accent2);color:var(--accent);font-weight:800;font-size:12px;flex:0 0 auto}
+.name{flex:1;font-weight:700} .total{font-weight:800;color:var(--accent);white-space:nowrap} .expand{background:transparent;color:#555;padding:6px;font-size:20px}
+.details{display:none;border-top:1px solid var(--line);padding:12px} .student.open .details{display:block}
+.section-title{font-size:13px;font-weight:800;margin:8px 0 7px;color:#4B5563} .chips{display:flex;flex-wrap:wrap;gap:7px}
+.chip{border:1px solid #d8d1e6;background:#fff;color:#514264;border-radius:999px;padding:8px 10px;font-size:13px;font-weight:650}
+.chip.active{background:var(--accent);color:#fff;border-color:var(--accent)} .chip.status{border-color:#e2c7c7;color:#8f3030} .chip.status.active{background:#a33;color:#fff;border-color:#a33}
+.buffet-row{display:grid;grid-template-columns:1fr 84px;gap:8px;align-items:center;margin:6px 0} .qty{display:grid;grid-template-columns:28px 28px 28px;align-items:center;justify-content:end}
+.qty button{padding:4px;background:#f1eef6;color:var(--accent);border-radius:8px} .qty span{text-align:center;font-weight:700}
+.comment{margin-top:8px;width:100%;min-height:58px;padding:10px;border:1px solid var(--line);border-radius:10px}
+nav{position:fixed;bottom:0;left:0;right:0;background:#fff;border-top:1px solid var(--line);display:flex;justify-content:space-around;padding:8px 6px calc(8px + env(safe-area-inset-bottom));z-index:20}
+nav button{background:transparent;color:#6B7280;padding:7px 8px;font-size:12px} nav button.active{color:var(--accent)} .page{display:none} .page.active{display:block}
+.panel{background:#fff;border-radius:16px;padding:13px;margin:10px 0;box-shadow:0 1px 5px #0001} .small{font-size:12px;color:var(--muted)}
+.student-edit{display:grid;grid-template-columns:1fr 42px 42px 46px;gap:6px;align-items:center;margin:7px 0} .student-edit button{padding:9px 5px}
+.report-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px} .report-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.day-row{display:grid;grid-template-columns:100px 1fr auto;gap:8px;align-items:center;padding:9px 0;border-bottom:1px solid var(--line)} .pill{display:inline-block;background:var(--accent2);color:var(--accent);padding:4px 8px;border-radius:999px;font-size:12px;font-weight:700}
+@media(max-width:420px){.summary{grid-template-columns:repeat(4,1fr)}.metric b{font-size:15px}.student-edit{grid-template-columns:1fr 38px 38px 42px}}
+</style>
 </head>
 <body>
-<header>
-  <div class="top">
-    <div>
-      <h1>Журнал питания</h1>
-      <div class="sub">30 учеников · быстрый учёт с телефона</div>
-    </div>
-    <button class="secondary" id="saveBtn">Сохранить</button>
-  </div>
-</header>
-
+<header><div class="top"><div><h1>Журнал питания</h1><div class="sub" id="headerSub">быстрый учёт с телефона</div></div><button class="secondary" id="saveBtn">Сохранить</button></div></header>
 <main>
-  <section id="page-today" class="page active">
-    <div class="toolbar">
-      <input type="date" id="dateInput">
-      <button class="secondary" id="clearDayBtn">Очистить день</button>
-    </div>
-    <div class="summary">
-      <div class="metric"><b id="sumKids">0</b><span>заполнено</span></div>
-      <div class="metric"><b id="sumHot">0</b><span>горячее</span></div>
-      <div class="metric"><b id="sumMoney">0 ₸</b><span>итого</span></div>
-    </div>
-    <div id="studentsList"></div>
-  </section>
+<section id="page-today" class="page active">
+<div class="toolbar"><input type="date" id="dateInput"><button class="secondary" id="clearDayBtn">Очистить день</button></div>
+<div class="summary">
+<div class="metric"><b id="sumKids">0</b><span>заполнено</span></div>
+<div class="metric"><b id="sumHot">0</b><span>горячее</span></div>
+<div class="metric"><b id="sumAbsent">0</b><span>отсутств.</span></div>
+<div class="metric"><b id="sumMoney">0 ₸</b><span>итого</span></div>
+</div>
+<div id="studentsList"></div>
+</section>
 
-  <section id="page-summary" class="page">
-    <div class="panel">
-      <b>Итоги по датам</b>
-      <div class="small">Сохраняются на этом телефоне.</div>
-    </div>
-    <div id="daysList"></div>
-  </section>
+<section id="page-summary" class="page">
+<div class="panel"><b>Итоги по датам</b><div class="small">Все записи сохраняются на этом телефоне.</div></div>
+<div id="daysList"></div>
+</section>
 
-  <section id="page-settings" class="page">
-    <div class="panel">
-      <b>Ученики</b>
-      <div class="small">Можно заменить «Ученик 1…30» на реальные фамилии.</div>
-      <div id="studentNames" class="settings-grid"></div>
-      <button id="saveNamesBtn" style="margin-top:10px">Сохранить фамилии</button>
-    </div>
+<section id="page-report" class="page">
+<div class="panel"><b>Отчёт</b><div class="small">Выберите период. Отчёт можно распечатать или сохранить как PDF через окно печати.</div>
+<div class="report-grid" style="margin-top:10px"><div><div class="small">С</div><input type="date" id="reportFrom"></div><div><div class="small">По</div><input type="date" id="reportTo"></div></div>
+<div class="report-actions"><button id="printBtn">Печать / PDF</button><button class="secondary" id="csvBtn">Скачать CSV</button></div></div>
+<div class="panel"><b>Что попадёт в отчёт</b><div class="small">Дата, ученик, статус, горячее, буфет, сумма и комментарий.</div></div>
+</section>
 
-    <div class="panel">
-      <b>Горячее питание</b>
-      <div class="small">Как в Excel: если выбрана хотя бы одна позиция горячего, начисляется фиксированная цена комплекса.</div>
-      <div class="menu-line"><span>7–10 лет</span><input id="price710" type="number" step="0.01"></div>
-      <div class="menu-line"><span>11–15 лет</span><input id="price1115" type="number" step="0.01"></div>
-      <div class="menu-line"><span>16–18 лет</span><input id="price1618" type="number" step="0.01"></div>
-      <label class="small">Возрастная группа</label>
-      <select id="ageGroup">
-        <option>7–10 лет</option><option>11–15 лет</option><option>16–18 лет</option>
-      </select>
-      <button id="savePricesBtn" style="margin-top:10px">Сохранить настройки</button>
-    </div>
-
-    <div class="panel">
-      <b>Резервная копия</b>
-      <div class="small">Данные хранятся в браузере телефона. Делайте резервную копию время от времени.</div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px">
-        <button id="exportBtn">Скачать JSON</button>
-        <button class="secondary" id="csvBtn">Скачать CSV</button>
-      </div>
-      <label class="small" style="display:block;margin-top:12px">Восстановить из JSON</label>
-      <input type="file" id="importFile" accept=".json,application/json">
-    </div>
-  </section>
+<section id="page-settings" class="page">
+<div class="panel"><b>Ученики</b><div class="small">Можно добавлять, удалять и менять порядок. Количество учеников не ограничено 30.</div>
+<div id="studentNames"></div><button id="addStudentBtn" style="margin-top:10px;width:100%">+ Добавить ученика</button><button id="saveNamesBtn" class="secondary" style="margin-top:8px;width:100%">Сохранить список</button></div>
+<div class="panel"><b>Горячее питание</b><div class="small">Если выбрана хотя бы одна позиция горячего, начисляется фиксированная цена комплекса.</div>
+<div class="report-grid" style="margin-top:8px"><div><div class="small">7–10 лет</div><input id="price710" type="number" step="0.01"></div><div><div class="small">11–15 лет</div><input id="price1115" type="number" step="0.01"></div></div>
+<div style="margin-top:8px"><div class="small">16–18 лет</div><input id="price1618" type="number" step="0.01"></div>
+<div style="margin-top:8px"><div class="small">Возрастная группа</div><select id="ageGroup"><option>7–10 лет</option><option>11–15 лет</option><option>16–18 лет</option></select></div>
+<button id="savePricesBtn" style="margin-top:10px">Сохранить настройки</button></div>
+<div class="panel"><b>Резервная копия</b><div class="small">Сохраните JSON, чтобы перенести журнал на другой телефон или восстановить данные.</div>
+<div class="report-actions"><button id="exportBtn">Скачать JSON</button><label class="secondary" style="display:grid;place-items:center;border-radius:12px;padding:12px;cursor:pointer">Восстановить<input type="file" id="importFile" accept=".json,application/json" hidden></label></div></div>
+</section>
 </main>
-
 <nav>
-  <button data-page="today" class="active">Сегодня</button>
-  <button data-page="summary">Итоги</button>
-  <button data-page="settings">Настройки</button>
+<button data-page="today" class="active">Сегодня</button>
+<button data-page="summary">Итоги</button>
+<button data-page="report">Отчёт</button>
+<button data-page="settings">Настройки</button>
 </nav>
 
 <script>
-const HOT_ITEMS = ["Салат морковь с сыром","Жаркое по-домашнему из птицы","Чай каркаде","Яблоко","Хлеб"];
-const DEFAULT_BUFFET = [
-  ["Курник",350],["Компот из сухофруктов",100],["Чай с молоком",100],["Учпучмак",350],
-  ["Кисель",100],["Чай с лимоном",100],["Чай черный",80],["Пирожок с картошкой",250],
-  ["Булочка со сгущенкой",280],["Ватрушка с творогом",280],["Вода",250],
-  ["Пирожок с капустой",250],["Булочка с яблоком",280],["Булочка с маком",280]
-];
-const DEFAULT = {
-  students:["Абраменкова Василиса Витальевна", "Әміржан Лейла Айдарқызы", "Белоконева Валерия Викторовна", "Быковский Александр Денисович", "Величко Анатолий Игоревич", "Гилязитдинов Руклен Игоревич", "Досов Артур Ринатович", "Данченко Богдан Владиславович", "Дубинов Иван Сергеевич", "Искаков Арлан Ертуганович", "Ильясов Ришат Талгатович", "Кожабекова Ясмин Арсеновна", "Кропотова Руфина Романовна", "Куанов Асмир Ринатович", "Кукеев Арыстан Нургельдыұлы", "Кулькеева Аида Хильмжановна", "Малючев Тимофей Алексеевич", "Морозова Ясмин Евгеньевна", "Нечаев Марк Алексеевич", "Носенко Леонид Владиславович", "Окуневич Ефросинья Леонидовна", "Панченко София Владимировна", "Сесин Виктор Иванович", "Сибиль Эмилия Викторовна", "Сиротюк Елизавета Игоревна", "Сұлтан Мейрімжан Мухағалиұлы", "Штергер Амиль Владимирович", "Эльдарова Асель Эльдаровна", "Тулегенов Дидар Ерсынович", "Мухамеджанов Алан Даниярович"],
-  prices:{"7–10 лет":851.20,"11–15 лет":903.84,"16–18 лет":954.24},
-  ageGroup:"11–15 лет",
-  buffet:DEFAULT_BUFFET,
-  days:{}
-};
-let state = JSON.parse(localStorage.getItem("foodJournalState")||"null") || structuredClone(DEFAULT);
-const CLASS_STUDENTS = ["Абраменкова Василиса Витальевна", "Әміржан Лейла Айдарқызы", "Белоконева Валерия Викторовна", "Быковский Александр Денисович", "Величко Анатолий Игоревич", "Гилязитдинов Руклен Игоревич", "Досов Артур Ринатович", "Данченко Богдан Владиславович", "Дубинов Иван Сергеевич", "Искаков Арлан Ертуганович", "Ильясов Ришат Талгатович", "Кожабекова Ясмин Арсеновна", "Кропотова Руфина Романовна", "Куанов Асмир Ринатович", "Кукеев Арыстан Нургельдыұлы", "Кулькеева Аида Хильмжановна", "Малючев Тимофей Алексеевич", "Морозова Ясмин Евгеньевна", "Нечаев Марк Алексеевич", "Носенко Леонид Владиславович", "Окуневич Ефросинья Леонидовна", "Панченко София Владимировна", "Сесин Виктор Иванович", "Сибиль Эмилия Викторовна", "Сиротюк Елизавета Игоревна", "Сұлтан Мейрімжан Мухағалиұлы", "Штергер Амиль Владимирович", "Эльдарова Асель Эльдаровна", "Тулегенов Дидар Ерсынович", "Мухамеджанов Алан Даниярович"];
-if (Array.isArray(state.students) && state.students.length===30 &&
-    state.students.every((n,i)=>n===`Ученик ${i+1}`)) {
-  state.students = [...CLASS_STUDENTS];
-  localStorage.setItem("foodJournalState", JSON.stringify(state));
-}
+const HOT_ITEMS=["Салат морковь с сыром","Жаркое по-домашнему из птицы","Чай каркаде","Яблоко","Хлеб"];
+const DEFAULT_BUFFET=[["Курник",350],["Компот из сухофруктов",100],["Чай с молоком",100],["Учпучмак",350],["Кисель",100],["Чай с лимоном",100],["Чай черный",80],["Пирожок с картошкой",250],["Булочка со сгущенкой",280],["Ватрушка с творогом",280],["Вода",250],["Пирожок с капустой",250],["Булочка с яблоком",280],["Булочка с маком",280]];
+const DEFAULT={students:[{"id": "s1", "name": "Абраменкова Василиса Витальевна"}, {"id": "s2", "name": "Әміржан Лейла Айдарқызы"}, {"id": "s3", "name": "Белоконева Валерия Викторовна"}, {"id": "s4", "name": "Быковский Александр Денисович"}, {"id": "s5", "name": "Величко Анатолий Игоревич"}, {"id": "s6", "name": "Гилязитдинов Руклен Игоревич"}, {"id": "s7", "name": "Досов Артур Ринатович"}, {"id": "s8", "name": "Данченко Богдан Владиславович"}, {"id": "s9", "name": "Дубинов Иван Сергеевич"}, {"id": "s10", "name": "Искаков Арлан Ертуганович"}, {"id": "s11", "name": "Ильясов Ришат Талгатович"}, {"id": "s12", "name": "Кожабекова Ясмин Арсеновна"}, {"id": "s13", "name": "Кропотова Руфина Романовна"}, {"id": "s14", "name": "Куанов Асмир Ринатович"}, {"id": "s15", "name": "Кукеев Арыстан Нургельдыұлы"}, {"id": "s16", "name": "Кулькеева Аида Хильмжановна"}, {"id": "s17", "name": "Малючев Тимофей Алексеевич"}, {"id": "s18", "name": "Морозова Ясмин Евгеньевна"}, {"id": "s19", "name": "Нечаев Марк Алексеевич"}, {"id": "s20", "name": "Носенко Леонид Владиславович"}, {"id": "s21", "name": "Окуневич Ефросинья Леонидовна"}, {"id": "s22", "name": "Панченко София Владимировна"}, {"id": "s23", "name": "Сесин Виктор Иванович"}, {"id": "s24", "name": "Сибиль Эмилия Викторовна"}, {"id": "s25", "name": "Сиротюк Елизавета Игоревна"}, {"id": "s26", "name": "Сұлтан Мейрімжан Мухағалиұлы"}, {"id": "s27", "name": "Штергер Амиль Владимирович"}, {"id": "s28", "name": "Эльдарова Асель Эльдаровна"}, {"id": "s29", "name": "Тулегенов Дидар Ерсынович"}, {"id": "s30", "name": "Мухамеджанов Алан Даниярович"}],prices:{"7–10 лет":851.20,"11–15 лет":903.84,"16–18 лет":954.24},ageGroup:"11–15 лет",buffet:DEFAULT_BUFFET,days:{}};
+let state=JSON.parse(localStorage.getItem("foodJournalState")||"null")||structuredClone(DEFAULT);
 
-
-// Обновление цены киселя: 100 ₸.
-if (Array.isArray(state.buffet)) {
-  const kisel = state.buffet.find(x => x[0] === "Кисель");
-  if (kisel && Number(kisel[1]) === 350) {
-    kisel[1] = 100;
-    localStorage.setItem("foodJournalState", JSON.stringify(state));
+// Миграция старой версии: строки учеников -> объекты с ID; записи по индексам -> записи по ID.
+if(Array.isArray(state.students) && state.students.length && typeof state.students[0]==="string"){
+  const oldNames=[...state.students];
+  state.students=oldNames.map((name,i)=>({id:"s"+(i+1),name}));
+  const newDays={};
+  for(const [d,dd] of Object.entries(state.days||{})){
+    newDays[d]={};
+    for(const [k,rec] of Object.entries(dd||{})){
+      const idx=Number(k);
+      if(Number.isInteger(idx) && state.students[idx]) newDays[d][state.students[idx].id]=rec;
+      else newDays[d][k]=rec;
+    }
   }
+  state.days=newDays;
 }
-function persist(){ localStorage.setItem("foodJournalState",JSON.stringify(state)); }
-function todayStr(){ const d=new Date(); return d.toISOString().slice(0,10); }
-const dateInput=document.getElementById("dateInput");
-dateInput.value=todayStr();
+if(!state.students?.length) state.students=structuredClone(DEFAULT.students);
+if(!state.buffet) state.buffet=structuredClone(DEFAULT_BUFFET);
+const kis=state.buffet.find(x=>x[0]==="Кисель"); if(kis && Number(kis[1])===350) kis[1]=100;
+persist();
 
-function dayData(){
-  const d=dateInput.value;
-  if(!state.days[d]) state.days[d]={};
-  return state.days[d];
-}
-function ensureStudentDay(i){
-  const dd=dayData();
-  if(!dd[i]) dd[i]={hot:[], buffet:{}, comment:""};
-  return dd[i];
-}
-function money(n){ return (Math.round((n||0)*100)/100).toLocaleString("ru-RU",{minimumFractionDigits:0,maximumFractionDigits:2})+" ₸"; }
-function calcStudent(rec){
-  const hot = rec.hot?.length ? Number(state.prices[state.ageGroup]||0) : 0;
-  let buffet=0;
-  for(const [name,price] of state.buffet){
-    buffet += Number(price||0) * Number(rec.buffet?.[name]||0);
-  }
-  return {hot,buffet,total:hot+buffet};
-}
-function hasAny(rec){
-  if((rec.hot||[]).length) return true;
-  if(Object.values(rec.buffet||{}).some(v=>Number(v)>0)) return true;
-  if((rec.comment||"").trim()) return true;
-  return false;
-}
-function esc(s){return String(s).replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[m]));}
+function persist(){localStorage.setItem("foodJournalState",JSON.stringify(state));}
+function todayStr(){return new Date().toISOString().slice(0,10);}
+function money(n){return (Math.round((n||0)*100)/100).toLocaleString("ru-RU",{maximumFractionDigits:2})+" ₸";}
+function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#039;"}[m]));}
+function ensureDay(){const d=dateInput.value;if(!state.days[d])state.days[d]={};return state.days[d];}
+function ensureRec(id){const dd=ensureDay();if(!dd[id])dd[id]={hot:[],buffet:{},comment:"",status:""};if(!dd[id].status)dd[id].status="";return dd[id];}
+function calc(rec){if(rec.status)return{hot:0,buffet:0,total:0};const hot=(rec.hot||[]).length?Number(state.prices[state.ageGroup]||0):0;let buffet=0;for(const [n,p] of state.buffet)buffet+=Number(p||0)*Number(rec.buffet?.[n]||0);return{hot,buffet,total:hot+buffet};}
+function hasAny(rec){return !!(rec.status||(rec.hot||[]).length||Object.values(rec.buffet||{}).some(v=>Number(v)>0)||(rec.comment||"").trim());}
+function clearStatusForFood(rec){if(rec.status)rec.status="";}
+
+dateInput.value=todayStr(); reportFrom.value=todayStr(); reportTo.value=todayStr();
 
 function renderStudents(){
-  const list=document.getElementById("studentsList");
-  const dd=dayData();
-  list.innerHTML=state.students.map((name,i)=>{
-    const rec=ensureStudentDay(i), c=calcStudent(rec);
-    const hotChips=HOT_ITEMS.map(item=>`<button class="chip ${rec.hot.includes(item)?"active":""}" onclick="toggleHot(${i},'${item.replaceAll("'","\\'")}')">${esc(item)}</button>`).join("");
-    const buffetRows=state.buffet.map(([item,price])=>{
-      const q=Number(rec.buffet[item]||0);
-      return `<div class="buffet-row"><div><b>${esc(item)}</b><div class="small">${money(price)}</div></div>
-        <div class="qty"><button onclick="qty(${i},'${item.replaceAll("'","\\'")}',-1)">−</button><span>${q}</span><button onclick="qty(${i},'${item.replaceAll("'","\\'")}',1)">+</button></div></div>`
-    }).join("");
-    return `<div class="student" id="student-${i}">
-      <div class="student-head" onclick="toggleStudent(${i})">
-        <div class="num">${i+1}</div><div class="name">${esc(name)}</div>
-        <div class="total">${money(c.total)}</div><button class="expand">⌄</button>
+  headerSub.textContent=`${state.students.length} учеников · быстрый учёт с телефона`;
+  const dd=ensureDay();
+  studentsList.innerHTML=state.students.map((s,i)=>{
+    const rec=ensureRec(s.id),c=calc(rec);
+    const hotChips=HOT_ITEMS.map(item=>`<button class="chip ${rec.hot.includes(item)?"active":""}" onclick="toggleHot('${s.id}','${item.replaceAll("'","\\'")}')">${esc(item)}</button>`).join("");
+    const buffetRows=state.buffet.map(([item,price])=>{const q=Number(rec.buffet[item]||0);return `<div class="buffet-row"><div><b>${esc(item)}</b><div class="small">${money(price)}</div></div><div class="qty"><button onclick="qty('${s.id}','${item.replaceAll("'","\\'")}',-1)">−</button><span>${q}</span><button onclick="qty('${s.id}','${item.replaceAll("'","\\'")}',1)">+</button></div></div>`}).join("");
+    return `<div class="student" id="student-${s.id}"><div class="student-head" onclick="toggleStudent('${s.id}')"><div class="num">${i+1}</div><div class="name">${esc(s.name)}</div><div class="total">${rec.status?esc(rec.status):money(c.total)}</div><button class="expand">⌄</button></div>
+    <div class="details">
+      <div class="section-title">Статус</div><div class="chips">
+        <button class="chip status ${rec.status==="Не питался"?"active":""}" onclick="setStatus('${s.id}','Не питался')">Не питался</button>
+        <button class="chip status ${rec.status==="Отсутствовал"?"active":""}" onclick="setStatus('${s.id}','Отсутствовал')">Отсутствовал</button>
       </div>
-      <div class="details">
-        <div class="section-title">Горячее — выберите любые позиции</div>
-        <div class="chips">${hotChips}</div>
-        <div class="small" style="margin-top:7px">Цена комплекса: ${money(state.prices[state.ageGroup])}</div>
-        <div class="section-title" style="margin-top:14px">Буфет — можно выбрать любые позиции</div>
-        ${buffetRows}
-        <textarea class="comment" placeholder="Комментарий" onchange="setComment(${i},this.value)">${esc(rec.comment||"")}</textarea>
-        <div style="display:flex;justify-content:space-between;margin-top:10px;font-weight:800">
-          <span>Итого</span><span>${money(c.total)}</span>
-        </div>
-      </div>
-    </div>`;
+      <div class="section-title">Горячее — любые позиции</div><div class="chips">${hotChips}</div><div class="small" style="margin-top:7px">Цена комплекса: ${money(state.prices[state.ageGroup])}</div>
+      <div class="section-title" style="margin-top:14px">Буфет — любые позиции</div>${buffetRows}
+      <textarea class="comment" placeholder="Комментарий" onchange="setComment('${s.id}',this.value)">${esc(rec.comment||"")}</textarea>
+      <div style="display:flex;justify-content:space-between;margin-top:10px;font-weight:800"><span>Итого</span><span>${money(c.total)}</span></div>
+    </div></div>`;
   }).join("");
   updateSummary();
 }
-window.toggleStudent=i=>document.getElementById(`student-${i}`).classList.toggle("open");
-window.toggleHot=(i,item)=>{
-  const rec=ensureStudentDay(i);
-  const p=rec.hot.indexOf(item);
-  if(p>=0) rec.hot.splice(p,1); else rec.hot.push(item);
-  persist(); renderStudents(); document.getElementById(`student-${i}`).classList.add("open");
-};
-window.qty=(i,item,delta)=>{
-  const rec=ensureStudentDay(i); const n=Math.max(0,Number(rec.buffet[item]||0)+delta);
-  if(n===0) delete rec.buffet[item]; else rec.buffet[item]=n;
-  persist(); renderStudents(); document.getElementById(`student-${i}`).classList.add("open");
-};
-window.setComment=(i,v)=>{ensureStudentDay(i).comment=v;persist();updateSummary();};
+window.toggleStudent=id=>document.getElementById("student-"+id)?.classList.toggle("open");
+window.setStatus=(id,status)=>{const rec=ensureRec(id);rec.status=rec.status===status?"":status;if(rec.status){rec.hot=[];rec.buffet={};}persist();renderStudents();document.getElementById("student-"+id)?.classList.add("open");};
+window.toggleHot=(id,item)=>{const rec=ensureRec(id);clearStatusForFood(rec);const p=rec.hot.indexOf(item);p>=0?rec.hot.splice(p,1):rec.hot.push(item);persist();renderStudents();document.getElementById("student-"+id)?.classList.add("open");};
+window.qty=(id,item,delta)=>{const rec=ensureRec(id);clearStatusForFood(rec);const n=Math.max(0,Number(rec.buffet[item]||0)+delta);if(n===0)delete rec.buffet[item];else rec.buffet[item]=n;persist();renderStudents();document.getElementById("student-"+id)?.classList.add("open");};
+window.setComment=(id,v)=>{ensureRec(id).comment=v;persist();updateSummary();};
+function updateSummary(){let filled=0,hot=0,absent=0,total=0;const dd=ensureDay();for(const s of state.students){const rec=dd[s.id]||{hot:[],buffet:{},comment:"",status:""};if(hasAny(rec))filled++;if(rec.status==="Отсутствовал")absent++;const c=calc(rec);if(c.hot>0)hot++;total+=c.total;}sumKids.textContent=filled;sumHot.textContent=hot;sumAbsent.textContent=absent;sumMoney.textContent=money(total);}
 
-function updateSummary(){
-  const dd=dayData(); let filled=0,hot=0,total=0;
-  for(let i=0;i<state.students.length;i++){
-    const rec=dd[i]||{hot:[],buffet:{},comment:""};
-    if(hasAny(rec)) filled++;
-    const c=calcStudent(rec); if(c.hot>0) hot++; total+=c.total;
-  }
-  sumKids.textContent=filled; sumHot.textContent=hot; sumMoney.textContent=money(total);
-}
-
-dateInput.addEventListener("change",()=>renderStudents());
-document.getElementById("saveBtn").onclick=()=>{persist(); alert("Сохранено");};
-document.getElementById("clearDayBtn").onclick=()=>{
-  if(confirm("Очистить все записи за выбранную дату?")){ delete state.days[dateInput.value]; persist(); renderStudents(); renderDays(); }
-};
+dateInput.onchange=renderStudents; saveBtn.onclick=()=>{persist();alert("Сохранено");}; clearDayBtn.onclick=()=>{if(confirm("Очистить все записи за выбранную дату?")){delete state.days[dateInput.value];persist();renderStudents();renderDays();}};
 
 function renderSettings(){
-  studentNames.innerHTML=state.students.map((n,i)=>`<input type="text" id="sn${i}" value="${esc(n)}">`).join("");
-  price710.value=state.prices["7–10 лет"]; price1115.value=state.prices["11–15 лет"]; price1618.value=state.prices["16–18 лет"]; ageGroup.value=state.ageGroup;
+  studentNames.innerHTML=state.students.map((s,i)=>`<div class="student-edit"><input type="text" value="${esc(s.name)}" data-id="${s.id}"><button class="secondary" onclick="moveStudent('${s.id}',-1)">↑</button><button class="secondary" onclick="moveStudent('${s.id}',1)">↓</button><button class="danger" onclick="deleteStudent('${s.id}')">×</button></div>`).join("");
+  price710.value=state.prices["7–10 лет"];price1115.value=state.prices["11–15 лет"];price1618.value=state.prices["16–18 лет"];ageGroup.value=state.ageGroup;
 }
-saveNamesBtn.onclick=()=>{
-  state.students=state.students.map((_,i)=>document.getElementById(`sn${i}`).value.trim()||`Ученик ${i+1}`);
-  persist(); renderStudents(); alert("Фамилии сохранены");
-};
-savePricesBtn.onclick=()=>{
-  state.prices["7–10 лет"]=Number(price710.value||0);
-  state.prices["11–15 лет"]=Number(price1115.value||0);
-  state.prices["16–18 лет"]=Number(price1618.value||0);
-  state.ageGroup=ageGroup.value; persist(); renderStudents(); alert("Настройки сохранены");
-};
+addStudentBtn.onclick=()=>{const id="s"+Date.now()+Math.floor(Math.random()*1000);state.students.push({id,name:"Новый ученик"});persist();renderSettings();renderStudents();};
+window.deleteStudent=id=>{const s=state.students.find(x=>x.id===id);if(!s)return;if(confirm(`Удалить ${s.name} из списка? Старые записи этого ученика останутся в архиве отчёта.`)){state.students=state.students.filter(x=>x.id!==id);persist();renderSettings();renderStudents();}};
+window.moveStudent=(id,dir)=>{const i=state.students.findIndex(x=>x.id===id),j=i+dir;if(i<0||j<0||j>=state.students.length)return;[state.students[i],state.students[j]]=[state.students[j],state.students[i]];persist();renderSettings();renderStudents();};
+saveNamesBtn.onclick=()=>{document.querySelectorAll("#studentNames input[data-id]").forEach(inp=>{const s=state.students.find(x=>x.id===inp.dataset.id);if(s)s.name=inp.value.trim()||"Без имени";});persist();renderStudents();alert("Список сохранён");};
+savePricesBtn.onclick=()=>{state.prices["7–10 лет"]=Number(price710.value||0);state.prices["11–15 лет"]=Number(price1115.value||0);state.prices["16–18 лет"]=Number(price1618.value||0);state.ageGroup=ageGroup.value;persist();renderStudents();alert("Настройки сохранены");};
 
-function renderDays(){
-  const dates=Object.keys(state.days).sort().reverse();
-  if(!dates.length){daysList.innerHTML='<div class="empty">Пока нет сохранённых дней.</div>';return;}
-  daysList.innerHTML=dates.map(d=>{
-    const dd=state.days[d]; let total=0,filled=0;
-    for(const k of Object.keys(dd)){ const rec=dd[k]; if(hasAny(rec)) filled++; total+=calcStudent(rec).total; }
-    return `<div class="panel day-row"><div><b>${d.split("-").reverse().join(".")}</b></div><div><span class="pill">${filled} учен.</span></div><b>${money(total)}</b></div>`;
-  }).join("");
-}
-
-document.querySelectorAll("nav button").forEach(btn=>btn.onclick=()=>{
-  document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));
-  btn.classList.add("active");
-  document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));
-  document.getElementById("page-"+btn.dataset.page).classList.add("active");
-  if(btn.dataset.page==="summary") renderDays();
-  if(btn.dataset.page==="settings") renderSettings();
-});
-
-function download(name,content,type){
-  const a=document.createElement("a"); a.href=URL.createObjectURL(new Blob([content],{type})); a.download=name; a.click(); URL.revokeObjectURL(a.href);
-}
+function renderDays(){const dates=Object.keys(state.days).sort().reverse();daysList.innerHTML=dates.length?dates.map(d=>{let total=0,filled=0;for(const rec of Object.values(state.days[d]||{})){if(hasAny(rec))filled++;total+=calc(rec).total;}return `<div class="panel day-row"><div><b>${d.split("-").reverse().join(".")}</b></div><div><span class="pill">${filled} записей</span></div><b>${money(total)}</b></div>`;}).join(""):'<div class="panel small">Пока нет сохранённых дней.</div>';}
+function studentNameById(id){return state.students.find(s=>s.id===id)?.name||"Удалённый ученик";}
+function reportRows(from,to){const rows=[];for(const d of Object.keys(state.days).sort()){if(d<from||d>to)continue;for(const [id,rec] of Object.entries(state.days[d]||{})){if(!hasAny(rec))continue;const c=calc(rec);const buff=Object.entries(rec.buffet||{}).filter(([,q])=>q>0).map(([n,q])=>`${n} × ${q}`).join("; ");rows.push([d,studentNameById(id),rec.status||"", (rec.hot||[]).join("; "),buff,c.hot,c.buffet,c.total,rec.comment||""]);}}return rows;}
+csvBtn.onclick=()=>{const rows=[["Дата","Ученик","Статус","Горячее","Буфет","Горячее ₸","Буфет ₸","Итого ₸","Комментарий"],...reportRows(reportFrom.value,reportTo.value)];const csv="\uFEFF"+rows.map(r=>r.map(v=>`"${String(v??"").replaceAll('"','""')}"`).join(";")).join("\n");download("Отчёт_питание_"+reportFrom.value+"_"+reportTo.value+".csv",csv,"text/csv;charset=utf-8");};
+printBtn.onclick=()=>{const rows=reportRows(reportFrom.value,reportTo.value);const total=rows.reduce((s,r)=>s+Number(r[7]||0),0);const body=rows.map(r=>`<tr>${r.slice(0,8).map((v,i)=>`<td>${i===0?esc(v.split("-").reverse().join(".")):esc(v)}</td>`).join("")}</tr>`).join("");const w=window.open("","_blank");w.document.write(`<!doctype html><html><head><meta charset="utf-8"><title>Отчёт по питанию</title><style>body{font-family:Arial,sans-serif;padding:20px;color:#111}h2{margin:0 0 6px}.meta{margin-bottom:14px}table{border-collapse:collapse;width:100%;font-size:11px}th,td{border:1px solid #999;padding:5px;vertical-align:top}th{background:#eee}.total{margin-top:12px;font-weight:bold}@media print{button{display:none}}</style></head><body><h2>Отчёт по питанию</h2><div class="meta">Период: ${reportFrom.value.split("-").reverse().join(".")} — ${reportTo.value.split("-").reverse().join(".")}</div><table><thead><tr><th>Дата</th><th>Ученик</th><th>Статус</th><th>Горячее</th><th>Буфет</th><th>Горячее ₸</th><th>Буфет ₸</th><th>Итого ₸</th></tr></thead><tbody>${body}</tbody></table><div class="total">Общая сумма: ${money(total)}</div><script>window.onload=()=>window.print()<\/script></body></html>`);w.document.close();};
+function download(name,content,type){const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([content],{type}));a.download=name;a.click();URL.revokeObjectURL(a.href);}
 exportBtn.onclick=()=>download("journal_food_backup.json",JSON.stringify(state,null,2),"application/json");
-csvBtn.onclick=()=>{
-  let rows=[["Дата","Ученик","Горячее","Буфет","Горячее ₸","Буфет ₸","Итого ₸","Комментарий"]];
-  for(const d of Object.keys(state.days).sort()){
-    for(let i=0;i<state.students.length;i++){
-      const rec=state.days[d][i]; if(!rec || !hasAny(rec)) continue;
-      const c=calcStudent(rec);
-      const buff=Object.entries(rec.buffet||{}).filter(([,q])=>q>0).map(([n,q])=>`${n} × ${q}`).join("; ");
-      rows.push([d,state.students[i],(rec.hot||[]).join("; "),buff,c.hot,c.buffet,c.total,rec.comment||""]);
-    }
-  }
-  const csv="\uFEFF"+rows.map(r=>r.map(v=>`"${String(v??"").replaceAll('"','""')}"`).join(";")).join("\n");
-  download("journal_food.csv",csv,"text/csv;charset=utf-8");
-};
-importFile.onchange=async e=>{
-  const f=e.target.files[0]; if(!f)return;
-  try{ const data=JSON.parse(await f.text()); state=data; persist(); renderSettings(); renderStudents(); alert("Резервная копия восстановлена"); }
-  catch{ alert("Не удалось прочитать файл"); }
-};
+importFile.onchange=async e=>{const f=e.target.files[0];if(!f)return;try{state=JSON.parse(await f.text());persist();location.reload();}catch{alert("Не удалось прочитать файл");}};
 
-if("serviceWorker" in navigator){ navigator.serviceWorker.register("./service-worker.js",{updateViaCache:"none"}).then(r=>r.update()).catch(()=>{}); }
-renderSettings(); renderStudents();
+document.querySelectorAll("nav button").forEach(btn=>btn.onclick=()=>{document.querySelectorAll("nav button").forEach(b=>b.classList.remove("active"));btn.classList.add("active");document.querySelectorAll(".page").forEach(p=>p.classList.remove("active"));document.getElementById("page-"+btn.dataset.page).classList.add("active");if(btn.dataset.page==="summary")renderDays();if(btn.dataset.page==="settings")renderSettings();});
+if("serviceWorker" in navigator)navigator.serviceWorker.register("./service-worker.js",{updateViaCache:"none"}).then(r=>r.update()).catch(()=>{});
+renderSettings();renderStudents();
 </script>
-</body>
-</html>
+</body></html>
