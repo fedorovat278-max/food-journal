@@ -708,7 +708,7 @@ await setDoc(
     type: "topup",
     amount: amount,
     balanceAfter: newBalance,
-    createdAt: serverTimestamp()
+    createdAt: new Date()
   }
 );
     $("teacherStudentBalance").textContent =
