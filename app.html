@@ -613,43 +613,99 @@ async function loadTeacherStudentBalance(){
 }
 async function loadTeacherTransactions(){
 
-  const snap = await getDocs(
+  const topUpsSnap = await getDocs(
     query(
       collection(db, "transactions"),
       where("studentId", "==", "student01")
     )
   );
 
-  const transactions = [];
+  const studentSnap = await getDoc(
+    doc(db, "students", "student01")
+  );
 
-  snap.forEach(docSnap => {
-    transactions.push(docSnap.data());
+  if(!studentSnap.exists()) return;
+
+  const studentUid = studentSnap.data().authUid;
+
+  const ordersSnap = await getDocs(
+    query(
+      collection(db, "orders"),
+      where("authUid", "==", studentUid)
+    )
+  );
+
+  const history = [];
+
+  topUpsSnap.forEach(docSnap => {
+    const item = docSnap.data();
+
+    history.push({
+      type: "topup",
+      amount: Number(item.amount || 0),
+      createdAt: item.createdAt
+    });
   });
 
-  transactions.sort((a, b) => {
+  ordersSnap.forEach(docSnap => {
+    const order = docSnap.data();
+
+    if(order.status === "confirmed"){
+      history.push({
+        type: "order",
+        amount: Number(order.total || 0),
+        date: order.date,
+        items: order.items || [],
+        createdAt: order.updatedAt
+      });
+    }
+  });
+
+  history.sort((a,b) => {
     const aTime = a.createdAt?.seconds || 0;
     const bTime = b.createdAt?.seconds || 0;
     return bTime - aTime;
   });
 
-  if(!transactions.length){
+  if(!history.length){
     $("teacherTransactions").innerHTML =
       '<div class="small">Операций пока нет</div>';
     return;
   }
 
   $("teacherTransactions").innerHTML =
-    transactions.map(item => {
+    history.map(item => {
 
       const date = item.createdAt?.toDate
         ? item.createdAt.toDate().toLocaleString("ru-RU")
-        : "только что";
+        : (item.date || "—");
+
+      if(item.type === "topup"){
+        return `
+          <div style="padding:10px 0; border-bottom:1px solid #ddd;">
+            <b>➕ ${money(item.amount)}</b><br>
+            <span class="small">
+              Пополнение • ${date}
+            </span>
+          </div>
+        `;
+      }
+
+      const food =
+        item.items
+          .map(foodItem =>
+            `${escapeHtml(foodItem.name)} × ${foodItem.qty}`
+          )
+          .join(", ");
 
       return `
         <div style="padding:10px 0; border-bottom:1px solid #ddd;">
-          <b>➕ ${money(item.amount)}</b><br>
+          <b>➖ ${money(item.amount)}</b><br>
           <span class="small">
-            Пополнение • ${date}
+            Питание • ${date}
+          </span><br>
+          <span class="small">
+            ${food}
           </span>
         </div>
       `;
