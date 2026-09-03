@@ -319,7 +319,26 @@
           </div>
         </div>
       </div>
+<div class="card">
+  <h3>💰 Баланс ученика</h3>
 
+  <div style="font-size:18px; font-weight:700; margin-bottom:10px;">
+    Тестовый ученик
+  </div>
+
+  <div id="teacherStudentBalance" style="margin-bottom:12px;">
+    Баланс: — ₸
+  </div>
+
+  <label>Пополнить на сумму</label>
+  <input id="teacherTopUp" type="number" min="0" placeholder="Например, 5000">
+
+  <button id="teacherTopUpBtn" class="green" style="margin-top:10px;">
+    + Пополнить баланс
+  </button>
+
+  <div id="teacherTopUpMsg" class="msg hidden"></div>
+</div>
 
       <div class="card">
         <h2>Меню на день</h2>
@@ -517,7 +536,7 @@ onAuthStateChanged(auth,user => {
 
     $("teacherEmailShown").textContent =
       user.email || "Учитель";
-
+loadTeacherStudentBalance();
     startTeacherOrders();
 
   }else{
@@ -569,7 +588,86 @@ $("teacherLoginBtn").onclick = async () => {
 $("logoutBtn").onclick = async () => {
   await signOut(auth);
 };
+async function loadTeacherStudentBalance(){
 
+  const snap = await getDoc(
+    doc(db, "students", "student01")
+  );
+
+  if(!snap.exists()) return;
+
+  const data = snap.data();
+  const amount = Number(data.balance || 0);
+
+  $("teacherStudentBalance").textContent =
+    "Внесено: " + money(amount);
+}
+
+
+$("teacherTopUpBtn").onclick = async () => {
+
+  const amount =
+    Number($("teacherTopUp").value);
+
+  if(!amount || amount <= 0){
+    showMessage(
+      $("teacherTopUpMsg"),
+      "Введите сумму пополнения.",
+      "warn"
+    );
+    return;
+  }
+
+  try{
+
+    const studentRef =
+      doc(db, "students", "student01");
+
+    const snap =
+      await getDoc(studentRef);
+
+    if(!snap.exists()){
+      throw new Error(
+        "Карточка ученика не найдена."
+      );
+    }
+
+    const oldBalance =
+      Number(snap.data().balance || 0);
+
+    const newBalance =
+      oldBalance + amount;
+
+    await setDoc(
+      studentRef,
+      {
+        balance: newBalance
+      },
+      { merge: true }
+    );
+
+    $("teacherStudentBalance").textContent =
+      "Внесено: " + money(newBalance);
+
+    $("teacherTopUp").value = "";
+
+    showMessage(
+      $("teacherTopUpMsg"),
+      "Баланс пополнен на " + money(amount),
+      "ok"
+    );
+
+  }catch(error){
+
+    console.error(error);
+
+    showMessage(
+      $("teacherTopUpMsg"),
+      "Не удалось пополнить баланс.",
+      "warn"
+    );
+  }
+};
 
 /* -----------------------
    МЕНЮ УЧИТЕЛЯ
