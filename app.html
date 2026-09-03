@@ -339,7 +339,15 @@
 
   <div id="teacherTopUpMsg" class="msg hidden"></div>
 </div>
+<div class="card">
+  <h3>📋 История операций</h3>
 
+  <div id="teacherTransactions">
+    <div class="small">
+      Операций пока нет
+    </div>
+  </div>
+</div>
       <div class="card">
         <h2>Меню на день</h2>
 
@@ -537,6 +545,7 @@ onAuthStateChanged(auth,user => {
     $("teacherEmailShown").textContent =
       user.email || "Учитель";
 loadTeacherStudentBalance();
+    loadTeacherTransactions();
     startTeacherOrders();
 
   }else{
@@ -602,7 +611,50 @@ async function loadTeacherStudentBalance(){
   $("teacherStudentBalance").textContent =
     "Внесено: " + money(amount);
 }
+async function loadTeacherTransactions(){
 
+  const snap = await getDocs(
+    query(
+      collection(db, "transactions"),
+      where("studentId", "==", "student01")
+    )
+  );
+
+  const transactions = [];
+
+  snap.forEach(docSnap => {
+    transactions.push(docSnap.data());
+  });
+
+  transactions.sort((a, b) => {
+    const aTime = a.createdAt?.seconds || 0;
+    const bTime = b.createdAt?.seconds || 0;
+    return bTime - aTime;
+  });
+
+  if(!transactions.length){
+    $("teacherTransactions").innerHTML =
+      '<div class="small">Операций пока нет</div>';
+    return;
+  }
+
+  $("teacherTransactions").innerHTML =
+    transactions.map(item => {
+
+      const date = item.createdAt?.toDate
+        ? item.createdAt.toDate().toLocaleString("ru-RU")
+        : "только что";
+
+      return `
+        <div style="padding:10px 0; border-bottom:1px solid #ddd;">
+          <b>➕ ${money(item.amount)}</b><br>
+          <span class="small">
+            Пополнение • ${date}
+          </span>
+        </div>
+      `;
+    }).join("");
+}
 
 $("teacherTopUpBtn").onclick = async () => {
 
@@ -645,7 +697,20 @@ $("teacherTopUpBtn").onclick = async () => {
       },
       { merge: true }
     );
+const transactionId =
+  "topup_" + Date.now();
 
+await setDoc(
+  doc(db, "transactions", transactionId),
+  {
+    studentId: "student01",
+    authUid: snap.data().authUid,
+    type: "topup",
+    amount: amount,
+    balanceAfter: newBalance,
+    createdAt: serverTimestamp()
+  }
+);
     $("teacherStudentBalance").textContent =
       "Внесено: " + money(newBalance);
 
@@ -656,7 +721,7 @@ $("teacherTopUpBtn").onclick = async () => {
       "Баланс пополнен на " + money(amount),
       "ok"
     );
-
+await loadTeacherTransactions();
   }catch(error){
 
     console.error(error);
