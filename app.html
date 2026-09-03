@@ -732,6 +732,18 @@ $("loadMenuBtn").onclick = async () => {
   try{
 
     await ensureStudentAuth();
+const studentRef = doc(db, "students", "student01");
+const studentSnap = await getDoc(studentRef);
+
+if (!studentSnap.exists()) {
+  throw new Error("Карточка ученика student01 не найдена.");
+}
+
+if (studentSnap.data().authUid !== currentStudentUID) {
+  throw new Error("Этот ученик не связан с данным устройством.");
+}
+
+    
 
     const snap =
       await getDoc(
