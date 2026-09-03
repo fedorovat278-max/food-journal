@@ -629,27 +629,36 @@ async function loadTeacherStudentBalance(){
     );
 
     $("teacherStudentsList").innerHTML =
-      students.map(student => `
-        <div style="
-          padding:12px 0;
-          border-bottom:1px solid #ddd;
-          display:flex;
-          justify-content:space-between;
-          align-items:center;
-          gap:10px;
-        ">
-          <div>
-            <b>${escapeHtml(student.name)}</b>
-          </div>
+  students.map(student => `
+    <div
+      class="teacher-student-row"
+      data-student-id="${student.id}"
+      data-student-name="${escapeHtml(student.name)}"
+      data-student-uid="${student.authUid}"
+      style="
+        padding:12px;
+        margin-bottom:6px;
+        border:1px solid #ddd;
+        border-radius:12px;
+        display:flex;
+        justify-content:space-between;
+        align-items:center;
+        gap:10px;
+        cursor:pointer;
+      "
+    >
+      <div>
+        <b>${escapeHtml(student.name)}</b>
+      </div>
 
-          <div style="
-            font-weight:700;
-            white-space:nowrap;
-          ">
-            ${money(student.balance)}
-          </div>
-        </div>
-      `).join("");
+      <div style="
+        font-weight:700;
+        white-space:nowrap;
+      ">
+        ${money(student.balance)}
+      </div>
+    </div>
+  `).join("");
 
   } catch(error) {
 
