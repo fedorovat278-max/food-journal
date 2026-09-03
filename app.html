@@ -895,6 +895,7 @@ studentName: selectedTeacherStudentName,
       "Внесено: " + money(newBalance);
 
     $("teacherTopUp").value = "";
+    await loadTeacherStudentBalance();
 
     showMessage(
       $("teacherTopUpMsg"),
