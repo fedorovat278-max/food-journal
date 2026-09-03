@@ -1,0 +1,1231 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Питание 5 класса — тест</title>
+
+  <style>
+    :root{
+      --accent:#6b5b95;
+      --accent2:#8b7ab8;
+      --bg:#f6f4fb;
+      --card:#ffffff;
+      --text:#24212d;
+      --muted:#716b7c;
+      --line:#e7e1ef;
+      --green:#2e8b57;
+      --danger:#b74646;
+      --orange:#e68a2e;
+    }
+
+    *{box-sizing:border-box}
+
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      background:var(--bg);
+      color:var(--text);
+    }
+
+    header{
+      background:linear-gradient(135deg,var(--accent),var(--accent2));
+      color:white;
+      padding:18px 16px;
+      box-shadow:0 4px 16px #0002;
+    }
+
+    .wrap{
+      max-width:850px;
+      margin:auto;
+      padding:14px 14px 80px;
+    }
+
+    h1,h2,h3{margin-top:0}
+    h1{font-size:22px;margin-bottom:4px}
+
+    .small{
+      font-size:13px;
+      color:var(--muted);
+    }
+
+    header .small{color:#eee}
+
+    .card{
+      background:var(--card);
+      border:1px solid var(--line);
+      border-radius:18px;
+      padding:16px;
+      margin:12px 0;
+      box-shadow:0 4px 16px #0000000b;
+    }
+
+    .tabs{
+      display:flex;
+      gap:8px;
+      margin:14px 0;
+    }
+
+    button{
+      border:0;
+      border-radius:12px;
+      padding:12px 15px;
+      font:inherit;
+      font-weight:700;
+      cursor:pointer;
+      background:var(--accent);
+      color:white;
+    }
+
+    button.secondary{
+      background:#eee9f6;
+      color:var(--accent);
+    }
+
+    button.green{background:var(--green)}
+    button.danger{background:var(--danger)}
+
+    button:disabled{
+      opacity:.45;
+      cursor:not-allowed;
+    }
+
+    input,textarea{
+      width:100%;
+      border:1px solid var(--line);
+      border-radius:12px;
+      padding:12px;
+      font:inherit;
+      background:white;
+    }
+
+    textarea{
+      min-height:190px;
+      resize:vertical;
+    }
+
+    label{
+      display:block;
+      font-weight:700;
+      margin:10px 0 6px;
+    }
+
+    .row{
+      display:flex;
+      gap:10px;
+      align-items:center;
+    }
+
+    .row > *{flex:1}
+
+    .hidden{display:none!important}
+
+    .msg{
+      border-radius:12px;
+      padding:11px 12px;
+      margin:10px 0;
+      background:#eee9f6;
+    }
+
+    .ok{
+      background:#e8f6ee;
+      color:#246b43;
+    }
+
+    .warn{
+      background:#fff1df;
+      color:#80500d;
+    }
+
+    .menu-item{
+      display:grid;
+      grid-template-columns:1fr 90px;
+      gap:10px;
+      align-items:center;
+      padding:13px 0;
+      border-bottom:1px solid var(--line);
+    }
+
+    .menu-item:last-child{border-bottom:0}
+
+    .dish-name{font-weight:750}
+    .price{font-size:14px;color:var(--muted)}
+
+    select{
+      width:100%;
+      padding:10px;
+      border:1px solid var(--line);
+      border-radius:10px;
+      background:white;
+      font:inherit;
+    }
+
+    .total{
+      font-size:27px;
+      font-weight:850;
+      margin:14px 0;
+      color:var(--accent);
+    }
+
+    .order{
+      padding:12px 0;
+      border-bottom:1px solid var(--line);
+    }
+
+    .order:last-child{border-bottom:0}
+
+    .order-head{
+      display:flex;
+      justify-content:space-between;
+      gap:10px;
+      font-weight:800;
+    }
+
+    .badge{
+      display:inline-block;
+      padding:5px 9px;
+      border-radius:999px;
+      font-size:12px;
+      background:#eee9f6;
+      color:var(--accent);
+    }
+
+    .summary-row{
+      display:flex;
+      justify-content:space-between;
+      gap:15px;
+      padding:10px 0;
+      border-bottom:1px solid var(--line);
+    }
+
+    .big-number{
+      font-size:25px;
+      font-weight:850;
+    }
+
+    .status{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-top:8px;
+    }
+
+    @media(max-width:600px){
+      .row{display:block}
+      .tabs button{flex:1;padding:11px 8px}
+      .menu-item{grid-template-columns:1fr 80px}
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="wrap" style="padding-top:0;padding-bottom:0">
+    <h1>🍽 Питание 5 класса</h1>
+    <div class="small">Новая тестовая версия</div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <div class="tabs">
+    <button id="studentTab">Ученик</button>
+    <button id="teacherTab" class="secondary">Учитель</button>
+  </div>
+
+  <!-- УЧЕНИК -->
+  <section id="studentView">
+
+    <div class="card">
+      <h2>Мой заказ</h2>
+
+      <label>Как тебя зовут?</label>
+      <input id="studentName" placeholder="Например: Алина">
+
+      <label>Дата питания</label>
+      <input id="studentDate" type="date">
+
+      <button id="loadMenuBtn" style="margin-top:12px">
+        Показать меню
+      </button>
+
+      <div id="studentStatus" class="msg hidden"></div>
+    </div>
+
+    <div id="menuCard" class="card hidden">
+      <h3>Меню</h3>
+      <div id="menuList"></div>
+
+      <div>
+        Итого:
+        <div class="total" id="studentTotal">0 ₸</div>
+      </div>
+
+      <button id="sendOrderBtn" class="green">
+        Подтвердить заказ
+      </button>
+    </div>
+
+    <div id="myOrderCard" class="card hidden">
+      <h3>✅ Заказ сохранён</h3>
+      <div id="myOrderText"></div>
+    </div>
+
+  </section>
+
+
+  <!-- УЧИТЕЛЬ -->
+  <section id="teacherView" class="hidden">
+
+    <div id="teacherLogin" class="card">
+      <h2>Вход учителя</h2>
+
+      <label>Email</label>
+      <input id="teacherEmail" type="email" placeholder="Ваш email">
+
+      <label>Пароль</label>
+      <input id="teacherPassword" type="password" placeholder="Пароль">
+
+      <button id="teacherLoginBtn" style="margin-top:12px">
+        Войти
+      </button>
+
+      <div id="teacherLoginMsg" class="msg hidden"></div>
+    </div>
+
+
+    <div id="teacherPanel" class="hidden">
+
+      <div class="card">
+        <div class="row">
+          <div>
+            <h2 style="margin-bottom:4px">👩‍🏫 Учитель</h2>
+            <div class="small" id="teacherEmailShown"></div>
+          </div>
+
+          <div style="text-align:right">
+            <button id="logoutBtn" class="secondary">
+              Выйти
+            </button>
+          </div>
+        </div>
+      </div>
+
+
+      <div class="card">
+        <h2>Меню на день</h2>
+
+        <label>Дата</label>
+        <input id="teacherDate" type="date">
+
+        <label>
+          Доступные позиции
+          <span class="small">— одна строка = название | цена</span>
+        </label>
+
+        <textarea id="menuEditor">Горячее питание | 903.84
+Курник | 350
+Компот из сухофруктов | 100
+Чай с молоком | 100
+Учпучмак | 350
+Кисель | 100
+Чай с лимоном | 100
+Чай черный | 80
+Пирожок с картошкой | 250
+Булочка со сгущенкой | 280
+Ватрушка с творогом | 280
+Вода | 250
+Пирожок с капустой | 250
+Булочка с яблоком | 280
+Булочка с маком | 280</textarea>
+
+        <label style="display:flex;gap:8px;align-items:center">
+          <input id="menuOpen" type="checkbox"
+                 style="width:auto" checked>
+          Открыть приём заказов
+        </label>
+
+        <button id="saveMenuBtn">
+          Сохранить меню
+        </button>
+
+        <div id="menuSaveMsg" class="msg hidden"></div>
+      </div>
+
+
+      <div class="card">
+        <h2>Заказы</h2>
+
+        <label>Дата</label>
+        <input id="ordersDate" type="date">
+
+        <div class="status">
+          <span class="badge">
+            Учеников: <b id="ordersCount">0</b>
+          </span>
+
+          <span class="badge">
+            Общая сумма: <b id="ordersMoney">0 ₸</b>
+          </span>
+        </div>
+
+        <div id="ordersList"
+             style="margin-top:12px"></div>
+      </div>
+
+
+      <div class="card">
+        <h2>📋 Заказ для столовой</h2>
+        <div id="cafeteriaSummary">
+          Пока заказов нет.
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+</main>
+
+
+<script type="module">
+
+import { initializeApp }
+from "https://www.gstatic.com/firebasejs/12.8.0/firebase-app.js";
+
+import {
+  getAuth,
+  signInWithEmailAndPassword,
+  signInAnonymously,
+  signOut,
+  onAuthStateChanged
+}
+from "https://www.gstatic.com/firebasejs/12.8.0/firebase-auth.js";
+
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc,
+  collection,
+  query,
+  where,
+  onSnapshot,
+  serverTimestamp
+}
+from "https://www.gstatic.com/firebasejs/12.8.0/firebase-firestore.js";
+
+
+const firebaseConfig = {
+  apiKey: "AIzaSyAUpmk3HuPPfVd8hkt_dcCz9xMRqjBVEv8",
+  authDomain: "food-journal-5-class.firebaseapp.com",
+  projectId: "food-journal-5-class",
+  storageBucket: "food-journal-5-class.firebasestorage.app",
+  messagingSenderId: "864788710989",
+  appId: "1:864788710989:web:3080eb01df2aaeae5dbe04"
+};
+
+
+const TEACHER_UID = "BIztbuFCATTryivXt1mTCLBULuk1";
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getFirestore(app);
+
+
+const $ = id => document.getElementById(id);
+
+const money = value =>
+  Number(value || 0).toLocaleString("ru-RU", {
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2
+  }) + " ₸";
+
+
+function localDate(offsetDays = 0){
+  const d = new Date();
+  d.setDate(d.getDate() + offsetDays);
+
+  const y = d.getFullYear();
+  const m = String(d.getMonth()+1).padStart(2,"0");
+  const day = String(d.getDate()).padStart(2,"0");
+
+  return `${y}-${m}-${day}`;
+}
+
+
+$("studentDate").value = localDate(1);
+$("teacherDate").value = localDate(1);
+$("ordersDate").value = localDate(1);
+
+$("studentName").value =
+  localStorage.getItem("foodStudentName") || "";
+
+
+function showMessage(el,text,type=""){
+  el.textContent = text;
+  el.className = "msg " + type;
+}
+
+
+function hideMessage(el){
+  el.className = "msg hidden";
+}
+
+
+/* -----------------------
+   ПЕРЕКЛЮЧЕНИЕ РЕЖИМОВ
+----------------------- */
+
+$("studentTab").onclick = () => {
+  $("studentView").classList.remove("hidden");
+  $("teacherView").classList.add("hidden");
+
+  $("studentTab").className = "";
+  $("teacherTab").className = "secondary";
+};
+
+
+$("teacherTab").onclick = () => {
+  $("teacherView").classList.remove("hidden");
+  $("studentView").classList.add("hidden");
+
+  $("teacherTab").className = "";
+  $("studentTab").className = "secondary";
+};
+
+
+/* -----------------------
+   АВТОРИЗАЦИЯ
+----------------------- */
+
+onAuthStateChanged(auth,user => {
+
+  if(user && user.uid === TEACHER_UID){
+
+    $("teacherLogin").classList.add("hidden");
+    $("teacherPanel").classList.remove("hidden");
+
+    $("teacherEmailShown").textContent =
+      user.email || "Учитель";
+
+    startTeacherOrders();
+
+  }else{
+
+    $("teacherLogin").classList.remove("hidden");
+    $("teacherPanel").classList.add("hidden");
+  }
+
+});
+
+
+$("teacherLoginBtn").onclick = async () => {
+
+  const email = $("teacherEmail").value.trim();
+  const password = $("teacherPassword").value;
+
+  if(!email || !password){
+    showMessage(
+      $("teacherLoginMsg"),
+      "Введите email и пароль.",
+      "warn"
+    );
+    return;
+  }
+
+  try{
+
+    await signInWithEmailAndPassword(
+      auth,
+      email,
+      password
+    );
+
+    hideMessage($("teacherLoginMsg"));
+
+  }catch(err){
+
+    console.error(err);
+
+    showMessage(
+      $("teacherLoginMsg"),
+      "Не удалось войти. Проверьте email и пароль.",
+      "warn"
+    );
+  }
+};
+
+
+$("logoutBtn").onclick = async () => {
+  await signOut(auth);
+};
+
+
+/* -----------------------
+   МЕНЮ УЧИТЕЛЯ
+----------------------- */
+
+function parseMenu(){
+
+  const lines = $("menuEditor").value
+    .split("\n")
+    .map(x => x.trim())
+    .filter(Boolean);
+
+  const items = [];
+
+  for(const line of lines){
+
+    const parts = line.split("|");
+
+    if(parts.length < 2) continue;
+
+    const name = parts[0].trim();
+    const price = Number(
+      parts[1]
+        .trim()
+        .replace(",",".")
+    );
+
+    if(name && Number.isFinite(price)){
+      items.push({name,price});
+    }
+  }
+
+  return items;
+}
+
+
+$("saveMenuBtn").onclick = async () => {
+
+  const user = auth.currentUser;
+
+  if(!user || user.uid !== TEACHER_UID){
+    return;
+  }
+
+  const date = $("teacherDate").value;
+  const items = parseMenu();
+
+  if(!date){
+    showMessage(
+      $("menuSaveMsg"),
+      "Выберите дату.",
+      "warn"
+    );
+    return;
+  }
+
+  if(!items.length){
+    showMessage(
+      $("menuSaveMsg"),
+      "Добавьте хотя бы одну позицию меню.",
+      "warn"
+    );
+    return;
+  }
+
+  try{
+
+    await setDoc(
+      doc(db,"menus",date),
+      {
+        date,
+        open:$("menuOpen").checked,
+        items,
+        updatedAt:serverTimestamp()
+      }
+    );
+
+    showMessage(
+      $("menuSaveMsg"),
+      `Меню на ${date} сохранено.`,
+      "ok"
+    );
+
+  }catch(err){
+
+    console.error(err);
+
+    showMessage(
+      $("menuSaveMsg"),
+      "Не удалось сохранить меню.",
+      "warn"
+    );
+  }
+};
+
+
+/* -----------------------
+   УЧЕНИК
+----------------------- */
+
+let currentMenu = null;
+let currentStudentUID = null;
+
+
+async function ensureStudentAuth(){
+
+  let user = auth.currentUser;
+
+  if(user && user.uid === TEACHER_UID){
+
+    throw new Error(
+      "На этом устройстве выполнен вход учителя."
+    );
+  }
+
+  if(!user){
+
+    const result =
+      await signInAnonymously(auth);
+
+    user = result.user;
+  }
+
+  currentStudentUID = user.uid;
+
+  return user;
+}
+
+
+$("loadMenuBtn").onclick = async () => {
+
+  hideMessage($("studentStatus"));
+  $("menuCard").classList.add("hidden");
+  $("myOrderCard").classList.add("hidden");
+
+  const name =
+    $("studentName").value.trim();
+
+  const date =
+    $("studentDate").value;
+
+  if(!name){
+
+    showMessage(
+      $("studentStatus"),
+      "Сначала напишите своё имя.",
+      "warn"
+    );
+
+    return;
+  }
+
+  if(!date){
+
+    showMessage(
+      $("studentStatus"),
+      "Выберите дату.",
+      "warn"
+    );
+
+    return;
+  }
+
+  localStorage.setItem(
+    "foodStudentName",
+    name
+  );
+
+  try{
+
+    await ensureStudentAuth();
+
+    const snap =
+      await getDoc(
+        doc(db,"menus",date)
+      );
+
+    if(!snap.exists()){
+
+      showMessage(
+        $("studentStatus"),
+        "Меню на эту дату ещё не опубликовано.",
+        "warn"
+      );
+
+      return;
+    }
+
+    currentMenu = snap.data();
+
+    if(!currentMenu.open){
+
+      showMessage(
+        $("studentStatus"),
+        "Приём заказов на эту дату закрыт.",
+        "warn"
+      );
+
+      return;
+    }
+
+    renderStudentMenu();
+
+  }catch(err){
+
+    console.error(err);
+
+    showMessage(
+      $("studentStatus"),
+      "Не удалось загрузить меню.",
+      "warn"
+    );
+  }
+};
+
+
+function renderStudentMenu(){
+
+  const list = $("menuList");
+
+  list.innerHTML = "";
+
+  currentMenu.items.forEach((item,index) => {
+
+    const div = document.createElement("div");
+
+    div.className = "menu-item";
+
+    div.innerHTML = `
+      <div>
+        <div class="dish-name">
+          ${escapeHtml(item.name)}
+        </div>
+
+        <div class="price">
+          ${money(item.price)}
+        </div>
+      </div>
+
+      <select data-index="${index}">
+        <option value="0">0</option>
+        <option value="1">1 шт.</option>
+        <option value="2">2 шт.</option>
+        <option value="3">3 шт.</option>
+      </select>
+    `;
+
+    list.appendChild(div);
+  });
+
+
+  list
+    .querySelectorAll("select")
+    .forEach(select => {
+
+      select.addEventListener(
+        "change",
+        calculateStudentTotal
+      );
+
+    });
+
+
+  calculateStudentTotal();
+
+  $("menuCard").classList.remove("hidden");
+}
+
+
+function selectedItems(){
+
+  const result = [];
+
+  $("menuList")
+    .querySelectorAll("select")
+    .forEach(select => {
+
+      const qty =
+        Number(select.value);
+
+      if(qty <= 0) return;
+
+      const item =
+        currentMenu.items[
+          Number(select.dataset.index)
+        ];
+
+      result.push({
+        name:item.name,
+        price:Number(item.price),
+        qty,
+        subtotal:
+          Number(item.price) * qty
+      });
+
+    });
+
+  return result;
+}
+
+
+function calculateStudentTotal(){
+
+  const total =
+    selectedItems()
+      .reduce(
+        (sum,item) =>
+          sum + item.subtotal,
+        0
+      );
+
+  $("studentTotal").textContent =
+    money(total);
+
+  return total;
+}
+
+
+$("sendOrderBtn").onclick = async () => {
+
+  const name =
+    $("studentName").value.trim();
+
+  const date =
+    $("studentDate").value;
+
+  const items =
+    selectedItems();
+
+  const total =
+    calculateStudentTotal();
+
+
+  if(!items.length){
+
+    showMessage(
+      $("studentStatus"),
+      "Выберите хотя бы одну позицию.",
+      "warn"
+    );
+
+    return;
+  }
+
+
+  try{
+
+    const user =
+      await ensureStudentAuth();
+
+    const orderId =
+      `${date}_${user.uid}`;
+
+    await setDoc(
+      doc(db,"orders",orderId),
+      {
+        authUid:user.uid,
+        studentName:name,
+        date,
+        items,
+        total,
+        status:"confirmed",
+        updatedAt:serverTimestamp()
+      }
+    );
+
+
+    $("myOrderText").innerHTML =
+      items.map(
+        item =>
+          `${escapeHtml(item.name)} × ${item.qty}
+           — <b>${money(item.subtotal)}</b>`
+      ).join("<br>") +
+      `<hr>
+       <div class="total">
+         ${money(total)}
+       </div>`;
+
+
+    $("myOrderCard")
+      .classList.remove("hidden");
+
+
+    showMessage(
+      $("studentStatus"),
+      "Заказ отправлен учителю.",
+      "ok"
+    );
+
+
+  }catch(err){
+
+    console.error(err);
+
+    showMessage(
+      $("studentStatus"),
+      "Не удалось сохранить заказ.",
+      "warn"
+    );
+  }
+};
+
+
+/* -----------------------
+   ЗАКАЗЫ УЧИТЕЛЯ
+----------------------- */
+
+let unsubscribeOrders = null;
+
+
+$("ordersDate").onchange =
+  startTeacherOrders;
+
+
+function startTeacherOrders(){
+
+  const user =
+    auth.currentUser;
+
+  if(!user ||
+     user.uid !== TEACHER_UID){
+    return;
+  }
+
+
+  if(unsubscribeOrders){
+    unsubscribeOrders();
+  }
+
+
+  const date =
+    $("ordersDate").value;
+
+  const q =
+    query(
+      collection(db,"orders"),
+      where("date","==",date)
+    );
+
+
+  unsubscribeOrders =
+    onSnapshot(
+      q,
+      snapshot => {
+
+        const orders = [];
+
+        snapshot.forEach(docSnap => {
+          orders.push({
+            id:docSnap.id,
+            ...docSnap.data()
+          });
+        });
+
+        renderTeacherOrders(orders);
+      },
+      err => {
+        console.error(err);
+      }
+    );
+}
+
+
+function renderTeacherOrders(orders){
+
+  $("ordersCount").textContent =
+    orders.length;
+
+
+  const moneyTotal =
+    orders.reduce(
+      (sum,o) =>
+        sum + Number(o.total || 0),
+      0
+    );
+
+
+  $("ordersMoney").textContent =
+    money(moneyTotal);
+
+
+  const list =
+    $("ordersList");
+
+  list.innerHTML = "";
+
+
+  if(!orders.length){
+
+    list.innerHTML =
+      `<div class="small">
+        Пока заказов нет.
+       </div>`;
+
+  }else{
+
+    orders
+      .sort(
+        (a,b) =>
+          String(a.studentName)
+            .localeCompare(
+              String(b.studentName),
+              "ru"
+            )
+      )
+      .forEach(order => {
+
+        const div =
+          document.createElement("div");
+
+        div.className = "order";
+
+
+        const itemsText =
+          (order.items || [])
+            .map(
+              i =>
+                `${escapeHtml(i.name)} × ${i.qty}`
+            )
+            .join(", ");
+
+
+        div.innerHTML = `
+          <div class="order-head">
+            <span>
+              ${escapeHtml(order.studentName || "Без имени")}
+            </span>
+
+            <span>
+              ${money(order.total)}
+            </span>
+          </div>
+
+          <div class="small"
+               style="margin-top:5px">
+            ${itemsText}
+          </div>
+        `;
+
+
+        list.appendChild(div);
+      });
+
+  }
+
+
+  renderCafeteriaSummary(orders);
+}
+
+
+function renderCafeteriaSummary(orders){
+
+  const summary = {};
+  let grandTotal = 0;
+
+
+  for(const order of orders){
+
+    grandTotal +=
+      Number(order.total || 0);
+
+
+    for(const item of order.items || []){
+
+      if(!summary[item.name]){
+        summary[item.name] = {
+          qty:0,
+          amount:0
+        };
+      }
+
+
+      summary[item.name].qty +=
+        Number(item.qty || 0);
+
+
+      summary[item.name].amount +=
+        Number(item.subtotal || 0);
+    }
+  }
+
+
+  const names =
+    Object.keys(summary)
+      .sort((a,b) =>
+        a.localeCompare(b,"ru")
+      );
+
+
+  if(!names.length){
+
+    $("cafeteriaSummary").innerHTML =
+      "Пока заказов нет.";
+
+    return;
+  }
+
+
+  let html = "";
+
+
+  for(const name of names){
+
+    const item =
+      summary[name];
+
+    html += `
+      <div class="summary-row">
+        <div>
+          <b>${escapeHtml(name)}</b>
+        </div>
+
+        <div style="text-align:right">
+          <b>${item.qty} шт.</b><br>
+          <span class="small">
+            ${money(item.amount)}
+          </span>
+        </div>
+      </div>
+    `;
+  }
+
+
+  html += `
+    <div style="margin-top:16px">
+      <div class="small">
+        Всего учеников
+      </div>
+
+      <div class="big-number">
+        ${orders.length}
+      </div>
+
+      <div class="small"
+           style="margin-top:10px">
+        Общая сумма
+      </div>
+
+      <div class="big-number">
+        ${money(grandTotal)}
+      </div>
+    </div>
+  `;
+
+
+  $("cafeteriaSummary").innerHTML =
+    html;
+}
+
+
+/* -----------------------
+   СЛУЖЕБНОЕ
+----------------------- */
+
+function escapeHtml(value){
+
+  return String(value ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+
+</script>
+
+</body>
+</html>
