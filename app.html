@@ -949,7 +949,10 @@ $("saveMenuBtn").onclick = async () => {
 let currentMenu = null;
 let currentStudentUID = null;
   let balance = 0;
-
+  
+let selectedTeacherStudentId = null;
+let selectedTeacherStudentName = "";
+let selectedTeacherStudentUID = "";
 
 async function ensureStudentAuth(){
 
