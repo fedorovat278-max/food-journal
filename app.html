@@ -242,7 +242,9 @@
 
       <label>Как тебя зовут?</label>
       <input id="studentName" placeholder="Например: Алина">
-
+<div id="studentBalance" style="margin:14px 0; padding:14px; border-radius:14px; background:#f3f6f4; font-size:18px; font-weight:700;">
+  💰 Баланс: — ₸
+</div>
       <label>Дата питания</label>
       <input id="studentDate" type="date">
 
@@ -738,7 +740,15 @@ const studentSnap = await getDoc(studentRef);
 if (!studentSnap.exists()) {
   throw new Error("Карточка ученика student01 не найдена.");
 }
+const studentData = studentSnap.data();
 
+document.getElementById("studentName").value =
+  studentData.name || "Ученик";
+
+const balance = Number(studentData.balance || 0);
+document.getElementById("studentBalance").textContent =
+  "💰 Баланс: " + balance.toLocaleString("ru-RU") + " ₸";
+    
 if (studentSnap.data().authUid !== currentStudentUID) {
   throw new Error("Этот ученик не связан с данным устройством.");
 }
