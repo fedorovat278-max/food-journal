@@ -599,17 +599,66 @@ $("logoutBtn").onclick = async () => {
 };
 async function loadTeacherStudentBalance(){
 
-  const snap = await getDoc(
-    doc(db, "students", "student01")
-  );
+  try {
 
-  if(!snap.exists()) return;
+    const studentsSnap = await getDocs(
+      collection(db, "students")
+    );
 
-  const data = snap.data();
-  const amount = Number(data.balance || 0);
+    if(studentsSnap.empty){
+      $("teacherStudentsList").innerHTML =
+        '<div class="small">Ученики пока не добавлены</div>';
+      return;
+    }
 
-  $("teacherStudentBalance").textContent =
-    "Внесено: " + money(amount);
+    const students = [];
+
+    studentsSnap.forEach(docSnap => {
+
+      const data = docSnap.data();
+
+      students.push({
+        id: docSnap.id,
+        name: data.name || "Без имени",
+        balance: Number(data.balance || 0)
+      });
+
+    });
+
+    students.sort((a, b) =>
+      a.name.localeCompare(b.name, "ru")
+    );
+
+    $("teacherStudentsList").innerHTML =
+      students.map(student => `
+        <div style="
+          padding:12px 0;
+          border-bottom:1px solid #ddd;
+          display:flex;
+          justify-content:space-between;
+          align-items:center;
+          gap:10px;
+        ">
+          <div>
+            <b>${escapeHtml(student.name)}</b>
+          </div>
+
+          <div style="
+            font-weight:700;
+            white-space:nowrap;
+          ">
+            ${money(student.balance)}
+          </div>
+        </div>
+      `).join("");
+
+  } catch(error) {
+
+    console.error(error);
+
+    $("teacherStudentsList").innerHTML =
+      '<div class="msg warn">Не удалось загрузить список учеников</div>';
+  }
 }
 async function loadTeacherTransactions(){
 
