@@ -262,6 +262,9 @@
       <div>
         Итого:
         <div class="total" id="studentTotal">0 ₸</div>
+       <div id="balanceAfterOrder">
+  После заказа останется: — ₸
+</div> 
       </div>
 <div id="balanceWarning"
      style="display:none; margin:10px 0; padding:10px; border-radius:10px; background:#fff3f3; font-weight:700;">
@@ -900,6 +903,10 @@ function calculateStudentTotal(){
 
   $("studentTotal").textContent =
     money(total);
+  const remaining = balance - total;
+
+$("balanceAfterOrder").textContent =
+  "После заказа останется: " + money(Math.max(remaining, 0));
 
   const warning = $("balanceWarning");
   const button = $("sendOrderBtn");
