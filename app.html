@@ -752,7 +752,26 @@ const studentData = studentSnap.data();
 document.getElementById("studentName").value =
   studentData.name || "Ученик";
 
-balance = Number(studentData.balance || 0);
+const startingBalance = Number(studentData.balance || 0);
+
+const ordersSnap = await getDocs(
+  query(
+    collection(db, "orders"),
+    where("authUid", "==", currentStudentUID)
+  )
+);
+
+let spent = 0;
+
+ordersSnap.forEach(orderDoc => {
+  const order = orderDoc.data();
+
+  if(order.status === "confirmed"){
+    spent += Number(order.total || 0);
+  }
+});
+
+balance = Math.max(startingBalance - spent, 0);
 document.getElementById("studentBalance").textContent =
   "💰 Баланс: " + balance.toLocaleString("ru-RU") + " ₸";
     
@@ -938,7 +957,16 @@ $("sendOrderBtn").onclick = async () => {
 
   const total =
     calculateStudentTotal();
+if(total > balance){
 
+  showMessage(
+    $("studentStatus"),
+    "Недостаточно средств на балансе.",
+    "warn"
+  );
+
+  return;
+}
 
   if(!items.length){
 
@@ -972,7 +1000,13 @@ $("sendOrderBtn").onclick = async () => {
         updatedAt:serverTimestamp()
       }
     );
+balance = balance - total;
 
+document.getElementById("studentBalance").textContent =
+  "💰 Баланс: " + balance.toLocaleString("ru-RU") + " ₸";
+
+document.getElementById("balanceAfterOrder").textContent =
+  "После заказа останется: " + balance.toLocaleString("ru-RU") + " ₸";
 
     $("myOrderText").innerHTML =
       items.map(
