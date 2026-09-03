@@ -799,6 +799,14 @@ async function loadTeacherTransactions(){
 }
 
 $("teacherTopUpBtn").onclick = async () => {
+  if(!selectedTeacherStudentId){
+  showMessage(
+    $("teacherTopUpMsg"),
+    "Сначала выберите ученика из списка.",
+    "warn"
+  );
+  return;
+}
 
   const amount =
     Number($("teacherTopUp").value);
@@ -815,7 +823,7 @@ $("teacherTopUpBtn").onclick = async () => {
   try{
 
     const studentRef =
-      doc(db, "students", "student01");
+    doc(db, "students", selectedTeacherStudentId);
 
     const snap =
       await getDoc(studentRef);
@@ -845,7 +853,8 @@ const transactionId =
 await setDoc(
   doc(db, "transactions", transactionId),
   {
-    studentId: "student01",
+ studentId: selectedTeacherStudentId,
+studentName: selectedTeacherStudentName,
     authUid: snap.data().authUid,
     type: "topup",
     amount: amount,
