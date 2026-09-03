@@ -660,6 +660,35 @@ async function loadTeacherStudentBalance(){
     </div>
   `).join("");
 
+    document.querySelectorAll(".teacher-student-row").forEach(row => {
+
+  row.onclick = () => {
+
+    selectedTeacherStudentId =
+      row.dataset.studentId;
+
+    selectedTeacherStudentName =
+      row.dataset.studentName;
+
+    selectedTeacherStudentUID =
+      row.dataset.studentUid;
+
+    document.querySelectorAll(".teacher-student-row")
+      .forEach(item => {
+        item.style.background = "";
+        item.style.border = "1px solid #ddd";
+      });
+
+    row.style.background = "#eef7f1";
+    row.style.border = "2px solid #4f8a63";
+
+    $("teacherTopUp").placeholder =
+      "Пополнить: " + selectedTeacherStudentName;
+
+  };
+
+});
+
   } catch(error) {
 
     console.error(error);
