@@ -263,7 +263,10 @@
         Итого:
         <div class="total" id="studentTotal">0 ₸</div>
       </div>
-
+<div id="balanceWarning"
+     style="display:none; margin:10px 0; padding:10px; border-radius:10px; background:#fff3f3; font-weight:700;">
+  ⚠️ Недостаточно средств на балансе
+</div>
       <button id="sendOrderBtn" class="green">
         Подтвердить заказ
       </button>
@@ -665,6 +668,7 @@ $("saveMenuBtn").onclick = async () => {
 
 let currentMenu = null;
 let currentStudentUID = null;
+  let balance = 0;
 
 
 async function ensureStudentAuth(){
@@ -745,7 +749,7 @@ const studentData = studentSnap.data();
 document.getElementById("studentName").value =
   studentData.name || "Ученик";
 
-const balance = Number(studentData.balance || 0);
+balance = Number(studentData.balance || 0);
 document.getElementById("studentBalance").textContent =
   "💰 Баланс: " + balance.toLocaleString("ru-RU") + " ₸";
     
@@ -897,10 +901,23 @@ function calculateStudentTotal(){
   $("studentTotal").textContent =
     money(total);
 
+  const warning = $("balanceWarning");
+  const button = $("sendOrderBtn");
+
+  if(total > balance){
+    warning.style.display = "block";
+    warning.textContent =
+      "⚠️ Недостаточно средств. На балансе " +
+      money(balance);
+
+    button.disabled = true;
+  } else {
+    warning.style.display = "none";
+    button.disabled = false;
+  }
+
   return total;
 }
-
-
 $("sendOrderBtn").onclick = async () => {
 
   const name =
