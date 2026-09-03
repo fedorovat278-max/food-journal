@@ -615,11 +615,12 @@ async function loadTeacherStudentBalance(){
 
       const data = docSnap.data();
 
-      students.push({
-        id: docSnap.id,
-        name: data.name || "Без имени",
-        balance: Number(data.balance || 0)
-      });
+   students.push({
+  id: docSnap.id,
+  name: data.name || "Без имени",
+  balance: Number(data.balance || 0),
+  authUid: data.authUid || ""
+});
 
     });
 
