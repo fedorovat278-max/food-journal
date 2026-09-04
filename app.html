@@ -1049,6 +1049,75 @@ await loadTeacherTransactions();
     );
   }
 };
+  async function removeDuplicateStudents(){
+
+  const snap = await getDocs(
+    collection(db, "students")
+  );
+
+  const groups = {};
+
+  snap.forEach(docSnap => {
+
+    const data = docSnap.data();
+
+    const name =
+      (data.name || "")
+        .trim()
+        .toLowerCase();
+
+    if(!name){
+      return;
+    }
+
+    if(!groups[name]){
+      groups[name] = [];
+    }
+
+    groups[name].push({
+      id: docSnap.id,
+      balance: Number(data.balance || 0),
+      authUid: data.authUid || ""
+    });
+
+  });
+
+  for(const name in groups){
+
+    const items = groups[name];
+
+    if(items.length <= 1){
+      continue;
+    }
+
+    items.sort((a,b) => {
+
+      const aImportant =
+        (a.balance > 0 ? 1 : 0) +
+        (a.authUid ? 1 : 0);
+
+      const bImportant =
+        (b.balance > 0 ? 1 : 0) +
+        (b.authUid ? 1 : 0);
+
+      return bImportant - aImportant;
+
+    });
+
+    const duplicates =
+      items.slice(1);
+
+    for(const duplicate of duplicates){
+
+      await deleteDoc(
+        doc(db, "students", duplicate.id)
+      );
+
+    }
+
+  }
+
+}
 $("teacherStudentsImportBtn").onclick = async () => {
 
   const raw =
