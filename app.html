@@ -1075,9 +1075,8 @@ $("teacherStudentsImportBtn").onclick = async () => {
 
     for(let i = 0; i < names.length; i++){
 
-      const studentId =
-  "classStudent" +
-  String(i + 1).padStart(2, "0");
+    const studentId =
+  "classStudent_" + Date.now() + "_" + i;
 
       await setDoc(
         doc(db, "students", studentId),
