@@ -992,7 +992,71 @@ await loadTeacherTransactions();
     );
   }
 };
+$("teacherStudentsImportBtn").onclick = async () => {
 
+  const raw =
+    $("teacherStudentsImport").value.trim();
+
+  if(!raw){
+
+    showMessage(
+      $("teacherStudentsImportMsg"),
+      "Вставьте список учеников.",
+      "warn"
+    );
+
+    return;
+  }
+
+  const names =
+    raw
+      .split("\n")
+      .map(name => name.trim())
+      .filter(Boolean);
+
+  try{
+
+    for(let i = 0; i < names.length; i++){
+
+      const studentId =
+  "classStudent" +
+  String(i + 1).padStart(2, "0");
+
+      await setDoc(
+        doc(db, "students", studentId),
+        {
+          name: names[i],
+          balance: 0,
+          authUid: ""
+        },
+        { merge: true }
+      );
+
+    }
+
+    $("teacherStudentsImport").value = "";
+
+    showMessage(
+      $("teacherStudentsImportMsg"),
+      "Ученики добавлены: " + names.length,
+      "ok"
+    );
+
+    await loadTeacherStudentBalance();
+
+  }catch(error){
+
+    console.error(error);
+
+    showMessage(
+      $("teacherStudentsImportMsg"),
+      "Не удалось добавить учеников.",
+      "warn"
+    );
+
+  }
+
+};
 /* -----------------------
    МЕНЮ УЧИТЕЛЯ
 ----------------------- */
