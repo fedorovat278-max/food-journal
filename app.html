@@ -785,44 +785,41 @@ document
   .querySelectorAll(".delete-student-btn")
   .forEach(button => {
 
-    button.onclick = async (event) => {
+ button.onclick = async (event) => {
 
-      event.stopPropagation();
+  event.stopPropagation();
 
-      const studentId =
-        button.dataset.deleteStudentId;
+  const studentId =
+    button.dataset.deleteStudentId;
 
-      const studentName =
-        button.dataset.deleteStudentName;
+  const studentName =
+    button.dataset.deleteStudentName;
 
-      const confirmed = confirm(
-        "Удалить ученика: " + studentName + "?"
-      );
+  const confirmed = confirm(
+    "Удалить ученика: " + studentName + "?"
+  );
 
-      if(!confirmed){
-        return;
-      }
+  if(!confirmed){
+    return;
+  }
 
-      try{
+  try{
 
-        await deleteDoc(
-          doc(db, "students", studentId)
-        );
+    await deleteDoc(
+      doc(db, "students", studentId)
+    );
 
-        await loadTeacherStudentBalance();
+    await loadTeacherStudentBalance();
 
-      }catch(error){
+  }catch(error){
 
-        console.error(error);
+    console.error(error);
 
-        alert("Не удалось удалить ученика.");
+    alert("Не удалось удалить ученика.");
 
-      }
+  }
 
-    };
-
-  });
-  };
+};
 
 });
 
