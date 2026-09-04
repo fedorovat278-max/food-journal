@@ -829,7 +829,26 @@ document
 
         let accessPin =
           studentSnap.data().accessPin || "";
+let accessCode =
+  studentSnap.data().accessCode || "";
+        if(!accessCode){
 
+  accessCode =
+    String(
+      Math.floor(
+        1000 + Math.random() * 9000
+      )
+    );
+
+  await setDoc(
+    studentRef,
+    {
+      accessCode: accessCode
+    },
+    { merge: true }
+  );
+
+}
         if(!accessPin){
 
           accessPin =
@@ -849,12 +868,14 @@ document
 
         }
 
-        alert(
-          "🔑 Код доступа\n\n" +
-          studentName +
-          "\n\nPIN: " +
-          accessPin
-        );
+       alert(
+  "🔑 Данные для входа\n\n" +
+  studentName +
+  "\n\nКод ученика: " +
+  accessCode +
+  "\nPIN: " +
+  accessPin
+);
 
       }catch(error){
 
