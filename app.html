@@ -1169,7 +1169,7 @@ $("teacherStudentsImportBtn").onclick = async () => {
       "Ученики добавлены: " + names.length,
       "ok"
     );
-
+await removeDuplicateStudents();
     await loadTeacherStudentBalance();
 
   }catch(error){
