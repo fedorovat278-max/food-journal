@@ -809,7 +809,15 @@ document
     await deleteDoc(
       doc(db, "students", studentId)
     );
+showMessage(
+  $("teacherStudentsImportMsg"),
+  "Ученики добавлены: " + names.length,
+  "ok"
+);
 
+await removeDuplicateStudents();
+
+await loadTeacherStudentBalance();
     await loadTeacherStudentBalance();
 
   }catch(error){
