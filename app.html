@@ -800,11 +800,11 @@ students.push({
    };
 
 }); 
- document
+document
   .querySelectorAll(".student-access-btn")
   .forEach(button => {
 
-    button.onclick = (event) => {
+    button.onclick = async (event) => {
 
       event.stopPropagation();
 
@@ -814,14 +814,61 @@ students.push({
       const studentName =
         button.dataset.studentName;
 
-      alert(
-        "Код доступа для ученика:\n" +
-        studentName
-      );
+      try {
+
+        const studentRef =
+          doc(db, "students", studentId);
+
+        const studentSnap =
+          await getDoc(studentRef);
+
+        if(!studentSnap.exists()){
+          alert("Карточка ученика не найдена.");
+          return;
+        }
+
+        let accessPin =
+          studentSnap.data().accessPin || "";
+
+        if(!accessPin){
+
+          accessPin =
+            String(
+              Math.floor(
+                100000 + Math.random() * 900000
+              )
+            );
+
+          await setDoc(
+            studentRef,
+            {
+              accessPin: accessPin
+            },
+            { merge: true }
+          );
+
+        }
+
+        alert(
+          "🔑 Код доступа\n\n" +
+          studentName +
+          "\n\nPIN: " +
+          accessPin
+        );
+
+      }catch(error){
+
+        console.error(error);
+
+        alert(
+          "Не удалось создать код доступа."
+        );
+
+      }
 
     };
 
-  });   
+  });
 document
   .querySelectorAll(".delete-student-btn")
   .forEach(button => {
