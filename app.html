@@ -474,6 +474,7 @@ import {
   getDoc,
   getDocs,
   setDoc,
+  deleteDoc,
   collection,
   query,
   where,
@@ -734,6 +735,21 @@ students.push({
   Остаток:
   ${money(student.remaining)}
 </div>
+<button
+  class="delete-student-btn"
+  data-delete-student-id="${student.id}"
+  data-delete-student-name="${escapeHtml(student.name)}"
+  style="
+    margin-top:10px;
+    background:#fff;
+    border:1px solid #d9d9d9;
+    border-radius:8px;
+    padding:6px 10px;
+    cursor:pointer;
+  "
+>
+  Удалить ученика
+</button>
     </div>
   `).join("");
 
@@ -762,7 +778,50 @@ students.push({
     $("teacherTopUp").placeholder =
       "Пополнить: " + selectedTeacherStudentName;
     loadTeacherTransactions();
+   };
 
+}); 
+document
+  .querySelectorAll(".delete-student-btn")
+  .forEach(button => {
+
+    button.onclick = async (event) => {
+
+      event.stopPropagation();
+
+      const studentId =
+        button.dataset.deleteStudentId;
+
+      const studentName =
+        button.dataset.deleteStudentName;
+
+      const confirmed = confirm(
+        "Удалить ученика: " + studentName + "?"
+      );
+
+      if(!confirmed){
+        return;
+      }
+
+      try{
+
+        await deleteDoc(
+          doc(db, "students", studentId)
+        );
+
+        await loadTeacherStudentBalance();
+
+      }catch(error){
+
+        console.error(error);
+
+        alert("Не удалось удалить ученика.");
+
+      }
+
+    };
+
+  });
   };
 
 });
