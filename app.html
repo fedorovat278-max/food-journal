@@ -809,15 +809,8 @@ document
   try{
 
     await deleteDoc(
-      doc(db, "students", studentId)
-    );
-showMessage(
-  $("teacherStudentsImportMsg"),
-  "Ученики добавлены: " + names.length,
-  "ok"
+  doc(db, "students", studentId)
 );
-
-await removeDuplicateStudents();
 
 await loadTeacherStudentBalance();
     
