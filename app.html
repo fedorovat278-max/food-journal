@@ -321,7 +321,40 @@
       </div>
 <div class="card">
   <h3>💰 Балансы класса</h3>
+<div style="margin:12px 0 16px 0;">
 
+  <label style="font-weight:700;">
+    Добавить список класса
+  </label>
+
+  <textarea
+    id="teacherStudentsImport"
+    rows="6"
+    placeholder="Вставьте ФИО учеников, по одному в каждой строке"
+    style="
+      width:100%;
+      margin-top:8px;
+      padding:10px;
+      border:1px solid #ccc;
+      border-radius:10px;
+      box-sizing:border-box;
+    "
+  ></textarea>
+
+  <button
+    id="teacherStudentsImportBtn"
+    class="green"
+    style="margin-top:10px;"
+  >
+    Добавить учеников
+  </button>
+
+  <div
+    id="teacherStudentsImportMsg"
+    class="msg hidden"
+  ></div>
+
+</div>
  <div id="teacherStudentsList">
   <div class="small">Загрузка списка учеников...</div>
 </div>
