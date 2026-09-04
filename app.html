@@ -608,18 +608,51 @@ async function loadTeacherStudentBalance(){
         '<div class="small">Ученики пока не добавлены</div>';
       return;
     }
+const ordersSnap = await getDocs(
+  collection(db, "orders")
+);
 
+const spentByUid = {};
+
+ordersSnap.forEach(orderDoc => {
+
+  const order = orderDoc.data();
+
+  if(order.status !== "confirmed"){
+    return;
+  }
+
+  const uid = order.authUid || "";
+
+  if(!uid){
+    return;
+  }
+
+  if(!spentByUid[uid]){
+    spentByUid[uid] = 0;
+  }
+
+  spentByUid[uid] += Number(order.total || 0);
+
+});
     const students = [];
 
     studentsSnap.forEach(docSnap => {
 
       const data = docSnap.data();
 
-   students.push({
+   const contributed = Number(data.balance || 0);
+const authUid = data.authUid || "";
+const spent = Number(spentByUid[authUid] || 0);
+const remaining = Math.max(contributed - spent, 0);
+
+students.push({
   id: docSnap.id,
   name: data.name || "Без имени",
-  balance: Number(data.balance || 0),
-  authUid: data.authUid || ""
+  contributed: contributed,
+  spent: spent,
+  remaining: remaining,
+  authUid: authUid
 });
 
     });
@@ -651,12 +684,23 @@ async function loadTeacherStudentBalance(){
         <b>${escapeHtml(student.name)}</b>
       </div>
 
-      <div style="
-        font-weight:700;
-        white-space:nowrap;
-      ">
-        ${money(student.balance)}
-      </div>
+    <div class="small" style="margin-top:6px;">
+  Внесено:
+  <b>${money(student.contributed)}</b>
+</div>
+
+<div class="small" style="margin-top:3px;">
+  Потрачено:
+  <b>${money(student.spent)}</b>
+</div>
+
+<div style="
+  margin-top:5px;
+  font-weight:700;
+">
+  Остаток:
+  ${money(student.remaining)}
+</div>
     </div>
   `).join("");
 
