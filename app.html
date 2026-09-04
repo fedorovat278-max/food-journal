@@ -801,6 +801,28 @@ students.push({
    };
 
 }); 
+ document
+  .querySelectorAll(".student-access-btn")
+  .forEach(button => {
+
+    button.onclick = (event) => {
+
+      event.stopPropagation();
+
+      const studentId =
+        button.dataset.studentId;
+
+      const studentName =
+        button.dataset.studentName;
+
+      alert(
+        "Код доступа для ученика:\n" +
+        studentName
+      );
+
+    };
+
+  });   
 document
   .querySelectorAll(".delete-student-btn")
   .forEach(button => {
