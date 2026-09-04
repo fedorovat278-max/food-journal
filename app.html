@@ -738,6 +738,23 @@ students.push({
   ${money(student.remaining)}
 </div>
 <button
+  class="student-access-btn"
+  data-student-id="${student.id}"
+  data-student-name="${escapeHtml(student.name)}"
+  style="
+    margin-top:10px;
+    margin-right:6px;
+    background:#fff;
+    color:#2457a6;
+    border:1px solid #cfd8e6;
+    border-radius:8px;
+    padding:6px 10px;
+    cursor:pointer;
+  "
+>
+  🔑 Код доступа
+</button>
+<button
   class="delete-student-btn"
   data-delete-student-id="${student.id}"
   data-delete-student-name="${escapeHtml(student.name)}"
