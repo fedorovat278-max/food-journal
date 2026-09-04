@@ -576,11 +576,10 @@ onAuthStateChanged(auth,user => {
 
     $("teacherEmailShown").textContent =
       user.email || "Учитель";
-removeDuplicateStudents()
-  .then(() => loadTeacherStudentBalance())
-  .catch(console.error);
-    loadTeacherTransactions();
-    startTeacherOrders();
+    removeDuplicateStudents()
+loadTeacherStudentBalance();
+loadTeacherTransactions();
+startTeacherOrders();
 
   }else{
 
