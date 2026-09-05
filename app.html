@@ -1583,7 +1583,36 @@ $("studentLoginBtn").onclick = async () => {
 
     currentStudentUID =
       credential.user.uid;
+const myStudentQuery =
+  query(
+    collection(db, "students"),
+    where("authUid", "==", currentStudentUID)
+  );
 
+const myStudentSnap =
+  await getDocs(myStudentQuery);
+
+if(myStudentSnap.empty){
+  throw new Error(
+    "Карточка ученика не найдена."
+  );
+}
+
+const myStudentDoc =
+  myStudentSnap.docs[0];
+
+const myStudent =
+  myStudentDoc.data();
+
+$("studentName").value =
+  myStudent.name || "";
+
+$("studentNameShown").textContent =
+  myStudent.name || "Ученик";
+
+$("studentLoggedIn")
+  .classList.remove("hidden");
+    
     showMessage(
       $("studentLoginMsg"),
       "Вход выполнен.",
