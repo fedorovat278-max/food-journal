@@ -902,14 +902,13 @@ let accessCode =
       )
     );
 
-  await setDoc(
-    studentRef,
-    {
-      accessCode: accessCode
-    },
-    { merge: true }
-  );
-
+ await setDoc(
+  studentRef,
+  {
+    authUid: studentAuthUid
+  },
+  { merge: true }
+);
 }
         if(!accessPin){
 
@@ -936,8 +935,8 @@ const studentData =
   freshStudentSnap.data();
 
 let studentAuthUid =
-  studentData.studentAuthUid || "";
-
+  studentData.authUid || "";
+        
 if(!studentAuthUid){
 
   const studentEmail =
