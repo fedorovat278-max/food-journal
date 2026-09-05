@@ -3232,6 +3232,61 @@ $("toggleStudentsImportBtn").onclick = () => {
   }
 
 };
+  $("downloadCafeteriaOrderBtn").onclick = () => {
+
+  const order =
+    window.currentCafeteriaOrder;
+
+  if(!order || !order.items || !order.items.length){
+    alert("Сначала загрузите заказ на выбранную дату.");
+    return;
+  }
+
+  let text =
+`ПИТАНИЕ 5 КЛАССА
+ЗАКАЗ В СТОЛОВУЮ
+
+`;
+
+  order.items.forEach(item => {
+
+    text +=
+`${item.name}
+Количество: ${item.qty} шт.
+Сумма: ${money(item.amount)}
+
+`;
+  });
+
+  text +=
+`------------------------------
+Всего учеников: ${order.studentsCount}
+Общая сумма: ${money(order.grandTotal)}
+`;
+
+  const blob =
+    new Blob(
+      [text],
+      { type: "text/plain;charset=utf-8" }
+    );
+
+  const url =
+    URL.createObjectURL(blob);
+
+  const a =
+    document.createElement("a");
+
+  a.href = url;
+  a.download = "Заказ_в_столовую.txt";
+
+  document.body.appendChild(a);
+
+  a.click();
+
+  a.remove();
+
+  URL.revokeObjectURL(url);
+};
 </script>
 
 </body>
