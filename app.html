@@ -443,21 +443,144 @@
           <span class="small">— одна строка = название | цена</span>
         </label>
 
-        <textarea id="menuEditor">Горячее питание | 903.84
-Курник | 350
-Компот из сухофруктов | 100
-Чай с молоком | 100
-Учпучмак | 350
-Кисель | 100
-Чай с лимоном | 100
-Чай черный | 80
-Пирожок с картошкой | 250
-Булочка со сгущенкой | 280
-Ватрушка с творогом | 280
-Вода | 250
-Пирожок с капустой | 250
-Булочка с яблоком | 280
-Булочка с маком | 280</textarea>
+       <div id="menuItemsEditor">
+
+  <div class="menu-item-row">
+    <label>
+      <input type="checkbox" class="menu-enabled" checked>
+      Горячее питание
+    </label>
+    <input type="number" class="menu-price" value="903.84" min="0" step="0.01">
+    <span>₸</span>
+  </div>
+
+  <div class="menu-item-row">
+    <label>
+      <input type="checkbox" class="menu-enabled" checked>
+      Курник
+    </label>
+    <input type="number" class="menu-price" value="350" min="0" step="1">
+    <span>₸</span>
+  </div>
+
+  <div class="menu-item-row">
+    <label>
+      <input type="checkbox" class="menu-enabled" checked>
+      Компот из сухофруктов
+    </label>
+    <input type="number" class="menu-price" value="100" min="0" step="1">
+    <span>₸</span>
+  </div>
+
+  <div class="menu-item-row">
+    <label>
+      <input type="checkbox" class="menu-enabled" checked>
+      Чай с молоком
+    </label>
+    <input type="number" class="menu-price" value="100" min="0" step="1">
+    <span>₸</span>
+  </div>
+
+  <div class="menu-item-row">
+    <label>
+      <input type="checkbox" class="menu-enabled" checked>
+      Учпучмак
+    </label>
+    <input type="number" class="menu-price" value="350" min="0" step="1">
+    <span>₸</span>
+  </div>
+
+  <div class="menu-item-row">
+    <label>
+      <input type="checkbox" class="menu-enabled" checked>
+      Кисель
+    </label>
+    <input type="number" class="menu-price" value="100" min="0" step="1">
+    <span>₸</span>
+  </div>
+
+  <div class="menu-item-row">
+    <label>
+      <input type="checkbox" class="menu-enabled" checked>
+      Чай с лимоном
+    </label>
+    <input type="number" class="menu-price" value="100" min="0" step="1">
+    <span>₸</span>
+  </div>
+
+  <div class="menu-item-row">
+    <label>
+      <input type="checkbox" class="menu-enabled" checked>
+      Чай черный
+    </label>
+    <input type="number" class="menu-price" value="80" min="0" step="1">
+    <span>₸</span>
+  </div>
+
+  <div class="menu-item-row">
+    <label>
+      <input type="checkbox" class="menu-enabled" checked>
+      Пирожок с картошкой
+    </label>
+    <input type="number" class="menu-price" value="250" min="0" step="1">
+    <span>₸</span>
+  </div>
+
+  <div class="menu-item-row">
+    <label>
+      <input type="checkbox" class="menu-enabled" checked>
+      Булочка со сгущенкой
+    </label>
+    <input type="number" class="menu-price" value="280" min="0" step="1">
+    <span>₸</span>
+  </div>
+
+  <div class="menu-item-row">
+    <label>
+      <input type="checkbox" class="menu-enabled" checked>
+      Ватрушка с творогом
+    </label>
+    <input type="number" class="menu-price" value="280" min="0" step="1">
+    <span>₸</span>
+  </div>
+
+  <div class="menu-item-row">
+    <label>
+      <input type="checkbox" class="menu-enabled" checked>
+      Вода
+    </label>
+    <input type="number" class="menu-price" value="250" min="0" step="1">
+    <span>₸</span>
+  </div>
+
+  <div class="menu-item-row">
+    <label>
+      <input type="checkbox" class="menu-enabled" checked>
+      Пирожок с капустой
+    </label>
+    <input type="number" class="menu-price" value="250" min="0" step="1">
+    <span>₸</span>
+  </div>
+
+  <div class="menu-item-row">
+    <label>
+      <input type="checkbox" class="menu-enabled" checked>
+      Булочка с яблоком
+    </label>
+    <input type="number" class="menu-price" value="280" min="0" step="1">
+    <span>₸</span>
+  </div>
+
+  <div class="menu-item-row">
+    <label>
+      <input type="checkbox" class="menu-enabled" checked>
+      Булочка с маком
+    </label>
+    <input type="number" class="menu-price" value="280" min="0" step="1">
+    <span>₸</span>
+  </div>
+
+</div>
 
         <label style="display:flex;gap:8px;align-items:center">
           <input id="menuOpen" type="checkbox"
@@ -1485,35 +1608,79 @@ $("saveMenuBtn").onclick = async () => {
   }
 
   const date = $("teacherDate").value;
-  const items = parseMenu();
 
   if(!date){
+
     showMessage(
       $("menuSaveMsg"),
       "Выберите дату.",
       "warn"
     );
+
     return;
   }
 
+  const rows =
+    document.querySelectorAll(".menu-item-row");
+
+  const items = [];
+
+  rows.forEach(row => {
+
+    const checkbox =
+      row.querySelector(".menu-enabled");
+
+    const priceInput =
+      row.querySelector(".menu-price");
+
+    const label =
+      row.querySelector("label");
+
+    if(!checkbox || !priceInput || !label){
+      return;
+    }
+
+    if(!checkbox.checked){
+      return;
+    }
+
+    const name =
+      label.textContent.trim();
+
+    const price =
+      Number(priceInput.value);
+
+    if(!name || price < 0 || Number.isNaN(price)){
+      return;
+    }
+
+    items.push({
+      name,
+      price
+    });
+
+  });
+
   if(!items.length){
+
     showMessage(
       $("menuSaveMsg"),
-      "Добавьте хотя бы одну позицию меню.",
+      "Включите хотя бы одну позицию меню.",
       "warn"
     );
+
     return;
   }
 
   try{
 
     await setDoc(
-      doc(db,"menus",date),
+      doc(db, "menus", date),
       {
         date,
-        open:$("menuOpen").checked,
+        open: $("menuOpen").checked,
         items,
-        updatedAt:serverTimestamp()
+        updatedAt: serverTimestamp()
       }
     );
 
@@ -1532,9 +1699,10 @@ $("saveMenuBtn").onclick = async () => {
       "Не удалось сохранить меню.",
       "warn"
     );
-  }
-};
 
+  }
+
+};
 
 /* -----------------------
    УЧЕНИК
