@@ -3191,7 +3191,15 @@ function renderCafeteriaSummary(orders){
     </div>
   `;
 
-
+window.currentCafeteriaOrder = {
+  items: names.map(name => ({
+    name: name,
+    qty: summary[name].qty,
+    amount: summary[name].amount
+  })),
+  studentsCount: orders.length,
+  grandTotal: grandTotal
+};
   $("cafeteriaSummary").innerHTML =
     html;
 }
