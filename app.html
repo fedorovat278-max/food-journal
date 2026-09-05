@@ -893,7 +893,7 @@ document
           studentSnap.data().accessPin || "";
 let accessCode =
   studentSnap.data().accessCode || "";
-        if(!accessCode){
+       if(!accessCode){
 
   accessCode =
     String(
@@ -902,15 +902,17 @@ let accessCode =
       )
     );
 
- await setDoc(
-  studentRef,
-  {
-    authUid: studentAuthUid
-  },
-  { merge: true }
-);
+  await setDoc(
+    studentRef,
+    {
+      accessCode: accessCode
+    },
+    { merge: true }
+  );
+
 }
-        if(!accessPin){
+
+if(!accessPin){
 
           accessPin =
             String(
