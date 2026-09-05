@@ -1695,13 +1695,23 @@ $("loadMenuBtn").onclick = async () => {
   try{
 
     await ensureStudentAuth();
-const studentRef = doc(db, "students", "student01");
-const studentSnap = await getDoc(studentRef);
+const studentQuery =
+  query(
+    collection(db, "students"),
+    where("authUid", "==", currentStudentUID)
+  );
 
-if (!studentSnap.exists()) {
-  throw new Error("Карточка ученика student01 не найдена.");
+const studentSnap =
+  await getDocs(studentQuery);
+
+if(studentSnap.empty){
+  throw new Error(
+    "Карточка ученика не найдена."
+  );
 }
-const studentData = studentSnap.data();
+
+const studentData =
+  studentSnap.docs[0].data();
 
 document.getElementById("studentName").value =
   studentData.name || "Ученик";
