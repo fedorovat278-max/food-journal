@@ -975,6 +975,9 @@ button:active{
   
 
   <label>Пополнить на сумму</label>
+  <div id="topUpStudentInfo" class="topup-student-info">
+  👤 Сначала выберите ученика из списка
+</div>
   <input id="teacherTopUp" type="number" min="0" placeholder="Например, 5000">
 
   <button id="teacherTopUpBtn" class="green" style="margin-top:10px;">
@@ -1529,6 +1532,8 @@ students.push({
 
     selectedTeacherStudentUID =
       row.dataset.studentUid;
+    $("topUpStudentInfo").textContent =
+  "👤 Выбран ученик: " + selectedTeacherStudentName;
 
     document.querySelectorAll(".teacher-student-row")
       .forEach(item => {
