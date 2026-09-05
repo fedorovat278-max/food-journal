@@ -929,7 +929,54 @@ let accessCode =
           );
 
         }
+const studentData =
+  studentSnap.data();
 
+let studentAuthUid =
+  studentData.studentAuthUid || "";
+
+if(!studentAuthUid){
+
+  const studentEmail =
+    "student" +
+    accessCode +
+    "@food-journal.local";
+
+  const studentPassword =
+    "Food" + accessPin + "!";
+
+  try {
+
+    const credential =
+      await createUserWithEmailAndPassword(
+        studentAccountAuth,
+        studentEmail,
+        studentPassword
+      );
+
+    studentAuthUid =
+      credential.user.uid;
+
+    await setDoc(
+      studentRef,
+      {
+        studentAuthUid: studentAuthUid
+      },
+      { merge: true }
+    );
+
+    await signOut(studentAccountAuth);
+
+  } catch(accountError) {
+
+    console.error(
+      "Ошибка создания аккаунта ученика:",
+      accountError
+    );
+
+  }
+
+}
        alert(
   "🔑 Данные для входа\n\n" +
   studentName +
