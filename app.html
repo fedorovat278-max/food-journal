@@ -3802,7 +3802,20 @@ ${money(currentBalance)}
 </div>
 
 </div>
-
+<script>
+if ("serviceWorker" in navigator) {
+  window.addEventListener("load", () => {
+    navigator.serviceWorker
+      .register("./service-worker.js")
+      .then(() => {
+        console.log("Service Worker зарегистрирован");
+      })
+      .catch(error => {
+        console.error("Ошибка Service Worker:", error);
+      });
+  });
+}
+</script>
 </body>
 
 </html>
