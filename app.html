@@ -929,8 +929,11 @@ let accessCode =
           );
 
         }
+const freshStudentSnap =
+  await getDoc(studentRef);
+
 const studentData =
-  studentSnap.data();
+  freshStudentSnap.data();
 
 let studentAuthUid =
   studentData.studentAuthUid || "";
