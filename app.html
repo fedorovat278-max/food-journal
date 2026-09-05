@@ -612,6 +612,65 @@ button:active{
   }
 
 }
+   /* ===== ФИНАЛЬНЫЙ ВИД МЕНЮ УЧЕНИКА ===== */
+
+#menuList .menu-item{
+  display:grid !important;
+  grid-template-columns:minmax(0,1fr) 92px !important;
+  gap:12px !important;
+  align-items:center !important;
+
+  padding:14px 15px !important;
+  margin:0 0 9px 0 !important;
+
+  background:#f8f9fc !important;
+  border:1px solid #e4e7ef !important;
+  border-radius:14px !important;
+}
+
+/* Горячее питание */
+
+#menuList .menu-item:first-child{
+  background:#fff8e8 !important;
+  border-color:#efd58b !important;
+}
+
+#menuList .dish-name{
+  font-size:16px !important;
+  font-weight:700 !important;
+  color:#202938 !important;
+}
+
+#menuList .price{
+  margin-top:4px !important;
+  color:#765da8 !important;
+  font-size:14px !important;
+  font-weight:600 !important;
+}
+
+#menuList .menu-item select{
+  width:92px !important;
+  height:44px !important;
+  margin:0 !important;
+  border-radius:11px !important;
+  background:#fff !important;
+  font-weight:700 !important;
+}
+
+/* телефон */
+
+@media (max-width:520px){
+
+  #menuList .menu-item{
+    grid-template-columns:minmax(0,1fr) 80px !important;
+    padding:12px !important;
+  }
+
+  #menuList .menu-item select{
+    width:80px !important;
+  }
+
+} 
   </style>
 </head>
 
