@@ -240,8 +240,61 @@
     <div class="card">
       <h2>Мой заказ</h2>
 
-      <label>Как тебя зовут?</label>
-      <input id="studentName" placeholder="Например: Алина">
+    <div id="studentLoginBox">
+
+  <h3 style="margin-top:0;">
+    🔑 Вход ученика
+  </h3>
+
+  <label>Код ученика</label>
+  <input
+    id="studentAccessCode"
+    type="text"
+    inputmode="numeric"
+    maxlength="4"
+    placeholder="4 цифры"
+  >
+
+  <label style="margin-top:10px;">
+    PIN
+  </label>
+  <input
+    id="studentAccessPin"
+    type="password"
+    inputmode="numeric"
+    maxlength="6"
+    placeholder="6 цифр"
+  >
+
+  <button
+    id="studentLoginBtn"
+    class="green"
+    style="margin-top:12px;"
+  >
+    Войти
+  </button>
+
+  <div
+    id="studentLoginMsg"
+    class="msg hidden"
+  ></div>
+
+</div>
+
+<div
+  id="studentLoggedIn"
+  class="hidden"
+  style="
+    margin:12px 0;
+    padding:12px;
+    border-radius:12px;
+    background:#f3f6f4;
+  "
+>
+  👤 <b id="studentNameShown">Ученик</b>
+</div>
+
+<input id="studentName" type="hidden">
 <div id="studentBalance" style="margin:14px 0; padding:14px; border-radius:14px; background:#f3f6f4; font-size:18px; font-weight:700;">
   💰 Баланс: — ₸
 </div>
