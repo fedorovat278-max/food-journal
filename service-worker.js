@@ -1,9 +1,9 @@
-const CACHE = "food-journal-v2";
+const CACHE = "food-journal-v3";
 
 const FILES = [
   "./app.html",
   "./manifest.webmanifest",
-  "./icon.svg"
+  "./icon-512.svg"
 ];
 
 self.addEventListener("install", event => {
