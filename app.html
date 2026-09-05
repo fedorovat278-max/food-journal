@@ -1556,6 +1556,23 @@ students.push({
   🔑 Код доступа
 </button>
 <button
+<button
+class="copy-access-btn"
+data-student-id="${student.id}"
+data-student-name="${escapeHtml(student.name)}"
+style="
+margin-top:10px;
+margin-right:6px;
+background:#fff;
+color:#18864b;
+border:1px solid #b9dfc9;
+border-radius:8px;
+padding:6px 10px;
+cursor:pointer;
+"
+>
+📋 Скопировать доступ
+</button>
   class="delete-student-btn"
   data-delete-student-id="${student.id}"
   data-delete-student-name="${escapeHtml(student.name)}"
@@ -1604,6 +1621,81 @@ students.push({
    };
 
 }); 
+    document
+.querySelectorAll(".copy-access-btn")
+.forEach(button => {
+
+  button.onclick = async (event) => {
+
+    event.stopPropagation();
+
+    const studentId =
+      button.dataset.studentId;
+
+    const studentName =
+      button.dataset.studentName;
+
+    try {
+
+      const studentRef =
+        doc(db, "students", studentId);
+
+      const studentSnap =
+        await getDoc(studentRef);
+
+      if(!studentSnap.exists()){
+        alert("Карточка ученика не найдена.");
+        return;
+      }
+
+      const studentData =
+        studentSnap.data();
+
+      const accessCode =
+        studentData.accessCode || "";
+
+      const accessPin =
+        studentData.accessPin || "";
+
+      if(!accessCode || !accessPin){
+
+        alert(
+          "Сначала нажмите «🔑 Код доступа» и создайте доступ ученику."
+        );
+
+        return;
+      }
+
+      const message =
+`🍽 Питание 5 класса
+
+Ученик: ${studentName}
+
+Код доступа: ${accessCode}
+PIN: ${accessPin}
+
+Вход в приложение:
+https://fedorovat278-max.github.io/food-journal/app.html`;
+
+      await navigator.clipboard.writeText(message);
+
+      alert(
+        "Доступ ученика скопирован.\n\nТеперь его можно вставить в личное сообщение родителю."
+      );
+
+    } catch(error) {
+
+      console.error(error);
+
+      alert(
+        "Не удалось скопировать доступ."
+      );
+
+    }
+
+  };
+
+});
 document
   .querySelectorAll(".student-access-btn")
   .forEach(button => {
