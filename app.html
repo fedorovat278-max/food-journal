@@ -962,12 +962,12 @@ if(!studentAuthUid){
       credential.user.uid;
 
     await setDoc(
-      studentRef,
-      {
-        studentAuthUid: studentAuthUid
-      },
-      { merge: true }
-    );
+  studentRef,
+  {
+    authUid: studentAuthUid
+  },
+  { merge: true }
+);
 
     await signOut(studentAccountAuth);
 
