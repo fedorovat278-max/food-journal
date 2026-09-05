@@ -215,6 +215,76 @@
       .tabs button{flex:1;padding:11px 8px}
       .menu-item{grid-template-columns:1fr 80px}
     }
+    /* ===== РЕДАКТОР МЕНЮ УЧИТЕЛЯ ===== */
+
+#menuItemsEditor{
+  margin-top: 12px;
+}
+
+.menu-item-row{
+  display: grid;
+  grid-template-columns: 28px minmax(0, 1fr) 90px 24px;
+  gap: 10px;
+  align-items: center;
+
+  padding: 11px 12px;
+  margin-bottom: 8px;
+
+  background: #f8f9fc;
+  border: 1px solid #e5e7ef;
+  border-radius: 12px;
+}
+
+.menu-item-row label{
+  display: contents;
+}
+
+.menu-item-row .menu-enabled{
+  width: 20px;
+  height: 20px;
+  margin: 0;
+  cursor: pointer;
+}
+
+.menu-item-row .menu-price{
+  width: 90px;
+  margin: 0;
+  padding: 8px 9px;
+
+  text-align: right;
+  font-weight: 600;
+}
+
+.menu-item-row > span:last-child{
+  font-weight: 600;
+  color: #555;
+}
+
+
+/* Горячее питание — первая строка */
+
+.menu-item-row:first-child{
+  background: #fff8e8;
+  border-color: #f0d58a;
+}
+
+
+/* Телефон */
+
+@media (max-width: 520px){
+
+  .menu-item-row{
+    grid-template-columns: 26px minmax(0, 1fr) 76px 20px;
+    gap: 7px;
+    padding: 10px 8px;
+  }
+
+  .menu-item-row .menu-price{
+    width: 76px;
+    padding: 7px;
+  }
+
+}
   </style>
 </head>
 
