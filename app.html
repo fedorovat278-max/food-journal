@@ -1533,7 +1533,65 @@ async function ensureStudentAuth(){
   return user;
 }
 
+$("studentLoginBtn").onclick = async () => {
 
+  const accessCode =
+    $("studentAccessCode").value.trim();
+
+  const accessPin =
+    $("studentAccessPin").value.trim();
+
+  if(
+    !/^\d{4}$/.test(accessCode) ||
+    !/^\d{6}$/.test(accessPin)
+  ){
+    showMessage(
+      $("studentLoginMsg"),
+      "Введите 4 цифры кода и 6 цифр PIN.",
+      "warn"
+    );
+    return;
+  }
+
+  try {
+
+    const studentEmail =
+      "student" +
+      accessCode +
+      "@food-journal.local";
+
+    const studentPassword =
+      "Food" + accessPin + "!";
+
+    const credential =
+      await signInWithEmailAndPassword(
+        auth,
+        studentEmail,
+        studentPassword
+      );
+
+    currentStudentUID =
+      credential.user.uid;
+
+    showMessage(
+      $("studentLoginMsg"),
+      "Вход выполнен.",
+      "ok"
+    );
+
+  } catch(error) {
+
+    console.error(error);
+
+    showMessage(
+      $("studentLoginMsg"),
+      "Неверный код ученика или PIN.",
+      "warn"
+    );
+
+  }
+
+};
 $("loadMenuBtn").onclick = async () => {
 
   hideMessage($("studentStatus"));
