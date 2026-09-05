@@ -1231,20 +1231,7 @@ $("teacherTransactions").innerHTML =
     `;
 
   }).join("");
-        return `
-          <div style="padding:10px 0; border-bottom:1px solid #ddd;">
-            <b>➖ ${money(item.amount)}</b><br>
-            <span class="small">
-              Питание • ${date}
-            </span><br>
-            <span class="small">
-              ${food}
-            </span>
-          </div>
-        `;
-
-      }).join("");
-
+       
   }catch(error){
 
     console.error(error);
