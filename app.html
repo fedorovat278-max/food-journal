@@ -1655,24 +1655,136 @@ $("studentBalance").textContent =
 };
 $("loadMenuBtn").onclick = async () => {
 
-  hideMessage($("studentStatus"));
-  $("menuCard").classList.add("hidden");
-  $("myOrderCard").classList.add("hidden");
+  const date =
+    $("studentDate").value;
 
   const name =
     $("studentName").value.trim();
 
-  const date =
-    $("studentDate").value;
+  if(!date){
+    showMessage(
+      $("studentStatus"),
+      "Выберите дату питания.",
+      "warn"
+    );
+    return;
+  }
 
   if(!name){
+    showMessage(
+      $("studentStatus"),
+      "Сначала выполните вход ученика.",
+      "warn"
+    );
+    return;
+  }
+
+  try{
+
+    const user =
+      auth.currentUser;
+
+    if(!user){
+      throw new Error(
+        "Сначала выполните вход ученика."
+      );
+    }
+
+    currentStudentUID =
+      user.uid;
+
+    const studentQuery =
+      query(
+        collection(db, "students"),
+        where("authUid", "==", currentStudentUID)
+      );
+
+    const studentSnap =
+      await getDocs(studentQuery);
+
+    if(studentSnap.empty){
+      throw new Error(
+        "Карточка ученика не найдена."
+      );
+    }
+
+    const studentData =
+      studentSnap.docs[0].data();
+
+    $("studentName").value =
+      studentData.name || "Ученик";
+
+    const startingBalance =
+      Number(studentData.balance || 0);
+
+    const ordersSnap =
+      await getDocs(
+        query(
+          collection(db, "orders"),
+          where("authUid", "==", currentStudentUID)
+        )
+      );
+
+    let spent = 0;
+
+    ordersSnap.forEach(orderDoc => {
+
+      const order =
+        orderDoc.data();
+
+      if(order.status === "confirmed"){
+        spent += Number(order.total || 0);
+      }
+
+    });
+
+    balance =
+      Math.max(
+        startingBalance - spent,
+        0
+      );
+
+    $("studentBalance").textContent =
+      "💰 Баланс: " +
+      balance.toLocaleString("ru-RU") +
+      " ₸";
+
+    const menuSnap =
+      await getDoc(
+        doc(db, "menus", date)
+      );
+
+    if(!menuSnap.exists()){
+      throw new Error(
+        "На эту дату меню ещё не опубликовано."
+      );
+    }
+
+    currentMenu =
+      menuSnap.data();
+
+    renderStudentMenu();
 
     showMessage(
       $("studentStatus"),
-      "Сначала напишите своё имя.",
+      "Меню загружено.",
+      "ok"
+    );
+
+  }catch(error){
+
+    console.error(error);
+
+    showMessage(
+      $("studentStatus"),
+      error.message ||
+      "Не удалось загрузить меню.",
       "warn"
     );
 
+  }
+
+};
     return;
   }
 
