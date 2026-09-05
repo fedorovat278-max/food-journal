@@ -1114,124 +1114,102 @@ async function loadTeacherTransactions(){
 
     history.sort((a,b) => {
 
-  const aTime =
-    a.createdAt?.seconds || 0;
+      const aTime =
+        a.createdAt?.seconds || 0;
 
-  const bTime =
-    b.createdAt?.seconds || 0;
+      const bTime =
+        b.createdAt?.seconds || 0;
 
-  return aTime - bTime;
+      return aTime - bTime;
 
-});
+    });
 
-if(!history.length){
+    if(!history.length){
 
-  $("teacherTransactions").innerHTML =
-    '<div class="small">Операций пока нет</div>';
+      $("teacherTransactions").innerHTML =
+        '<div class="small">Операций пока нет</div>';
 
-  return;
-}
-
-let runningBalance = 0;
-
-history.forEach(item => {
-
-  if(item.type === "topup"){
-    runningBalance += item.amount;
-  }
-
-  if(item.type === "order"){
-    runningBalance -= item.amount;
-  }
-
-  item.balanceAfter =
-    Math.max(runningBalance, 0);
-
-});
-
-history.reverse();
-
-$("teacherTransactions").innerHTML =
-  history.map(item => {
-
-    const date =
-      item.createdAt?.toDate
-        ? item.createdAt
-            .toDate()
-            .toLocaleString("ru-RU")
-        : (item.date || "—");
-
-    if(item.type === "topup"){
-
-      return `
-        <div style="
-          padding:12px 0;
-          border-bottom:1px solid #ddd;
-        ">
-
-          <b>
-            ➕ ${money(item.amount)}
-          </b>
-
-          <br>
-
-          <span class="small">
-            Пополнение • ${date}
-          </span>
-
-          <br>
-
-          <span class="small">
-            Остаток после операции:
-            <b>${money(item.balanceAfter)}</b>
-          </span>
-
-        </div>
-      `;
-
+      return;
     }
 
-    const food =
-      item.items
-        .map(foodItem =>
-          `${escapeHtml(foodItem.name)} × ${foodItem.qty}`
-        )
-        .join(", ");
+    let runningBalance = 0;
 
-    return `
-      <div style="
-        padding:12px 0;
-        border-bottom:1px solid #ddd;
-      ">
+    history.forEach(item => {
 
-        <b>
-          ➖ ${money(item.amount)}
-        </b>
+      if(item.type === "topup"){
+        runningBalance += item.amount;
+      }
 
-        <br>
+      if(item.type === "order"){
+        runningBalance -= item.amount;
+      }
 
-        <span class="small">
-          Питание • ${date}
-        </span>
+      item.balanceAfter =
+        Math.max(runningBalance, 0);
 
-        <br>
+    });
 
-        <span class="small">
-          ${food}
-        </span>
+    history.reverse();
 
-        <br>
+    $("teacherTransactions").innerHTML =
+      history.map(item => {
 
-        <span class="small">
-          Остаток после операции:
-          <b>${money(item.balanceAfter)}</b>
-        </span>
+        const date =
+          item.createdAt?.toDate
+            ? item.createdAt.toDate().toLocaleString("ru-RU")
+            : (item.date || "—");
 
-      </div>
-    `;
+        if(item.type === "topup"){
 
-  }).join("");
-       
+          return `
+            <div style="padding:12px 0; border-bottom:1px solid #ddd;">
+
+              <b>➕ ${money(item.amount)}</b><br>
+
+              <span class="small">
+                Пополнение • ${date}
+              </span><br>
+
+              <span class="small">
+                Остаток после операции:
+                <b>${money(item.balanceAfter)}</b>
+              </span>
+
+            </div>
+          `;
+
+        }
+
+        const food =
+          item.items
+            .map(foodItem =>
+              `${escapeHtml(foodItem.name)} × ${foodItem.qty}`
+            )
+            .join(", ");
+
+        return `
+          <div style="padding:12px 0; border-bottom:1px solid #ddd;">
+
+            <b>➖ ${money(item.amount)}</b><br>
+
+            <span class="small">
+              Питание • ${date}
+            </span><br>
+
+            <span class="small">
+              ${food}
+            </span><br>
+
+            <span class="small">
+              Остаток после операции:
+              <b>${money(item.balanceAfter)}</b>
+            </span>
+
+          </div>
+        `;
+
+      }).join("");
+
   }catch(error){
 
     console.error(error);
@@ -1240,6 +1218,7 @@ $("teacherTransactions").innerHTML =
       '<div class="small">Не удалось загрузить историю</div>';
 
   }
+
 }
 
 $("teacherTopUpBtn").onclick = async () => {
