@@ -1114,52 +1114,123 @@ async function loadTeacherTransactions(){
 
     history.sort((a,b) => {
 
-      const aTime =
-        a.createdAt?.seconds || 0;
+  const aTime =
+    a.createdAt?.seconds || 0;
 
-      const bTime =
-        b.createdAt?.seconds || 0;
+  const bTime =
+    b.createdAt?.seconds || 0;
 
-      return bTime - aTime;
+  return aTime - bTime;
 
-    });
+});
 
-    if(!history.length){
+if(!history.length){
 
-      $("teacherTransactions").innerHTML =
-        '<div class="small">Операций пока нет</div>';
+  $("teacherTransactions").innerHTML =
+    '<div class="small">Операций пока нет</div>';
 
-      return;
+  return;
+}
+
+let runningBalance = 0;
+
+history.forEach(item => {
+
+  if(item.type === "topup"){
+    runningBalance += item.amount;
+  }
+
+  if(item.type === "order"){
+    runningBalance -= item.amount;
+  }
+
+  item.balanceAfter =
+    Math.max(runningBalance, 0);
+
+});
+
+history.reverse();
+
+$("teacherTransactions").innerHTML =
+  history.map(item => {
+
+    const date =
+      item.createdAt?.toDate
+        ? item.createdAt
+            .toDate()
+            .toLocaleString("ru-RU")
+        : (item.date || "—");
+
+    if(item.type === "topup"){
+
+      return `
+        <div style="
+          padding:12px 0;
+          border-bottom:1px solid #ddd;
+        ">
+
+          <b>
+            ➕ ${money(item.amount)}
+          </b>
+
+          <br>
+
+          <span class="small">
+            Пополнение • ${date}
+          </span>
+
+          <br>
+
+          <span class="small">
+            Остаток после операции:
+            <b>${money(item.balanceAfter)}</b>
+          </span>
+
+        </div>
+      `;
+
     }
 
-    $("teacherTransactions").innerHTML =
-      history.map(item => {
+    const food =
+      item.items
+        .map(foodItem =>
+          `${escapeHtml(foodItem.name)} × ${foodItem.qty}`
+        )
+        .join(", ");
 
-        const date =
-          item.createdAt?.toDate
-            ? item.createdAt.toDate().toLocaleString("ru-RU")
-            : (item.date || "—");
+    return `
+      <div style="
+        padding:12px 0;
+        border-bottom:1px solid #ddd;
+      ">
 
-        if(item.type === "topup"){
+        <b>
+          ➖ ${money(item.amount)}
+        </b>
 
-          return `
-            <div style="padding:10px 0; border-bottom:1px solid #ddd;">
-              <b>➕ ${money(item.amount)}</b><br>
-              <span class="small">
-                Пополнение • ${date}
-              </span>
-            </div>
-          `;
+        <br>
 
-        }
+        <span class="small">
+          Питание • ${date}
+        </span>
 
-        const food =
-          item.items
-            .map(foodItem =>
-              `${escapeHtml(foodItem.name)} × ${foodItem.qty}`
-            )
-            .join(", ");
+        <br>
 
+        <span class="small">
+          ${food}
+        </span>
+
+        <br>
+
+        <span class="small">
+          Остаток после операции:
+          <b>${money(item.balanceAfter)}</b>
+        </span>
+
+      </div>
+    `;
+
+  }).join("");
         return `
           <div style="padding:10px 0; border-bottom:1px solid #ddd;">
             <b>➖ ${money(item.amount)}</b><br>
