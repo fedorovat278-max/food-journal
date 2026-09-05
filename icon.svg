@@ -1,6 +1,95 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
-<rect width="512" height="512" rx="110" fill="#6B5B95"/>
-<circle cx="256" cy="256" r="150" fill="#fff"/>
-<path d="M170 150v120c0 30 22 54 50 60v62h36v-62c28-6 50-30 50-60V150h-28v92h-22v-92h-28v92h-22v-92z" fill="#6B5B95"/>
-<rect x="315" y="145" width="34" height="247" rx="17" fill="#6B5B95"/>
+
+  <!-- Фон -->
+  <rect width="512" height="512" rx="105" fill="#7563B8"/>
+
+  <!-- Декоративный круг -->
+  <circle cx="256" cy="250" r="190" fill="#8D7ACB"/>
+
+  <!-- Тарелка -->
+  <circle cx="256" cy="245" r="155" fill="#FFFFFF"/>
+  <circle cx="256" cy="245" r="135" fill="#F7F4FC"/>
+
+  <!-- Колпак повара -->
+  <path d="
+    M210 157
+    C198 150 194 134 202 123
+    C210 111 224 108 236 114
+    C242 99 258 91 273 96
+    C285 100 293 110 295 122
+    C310 117 326 125 331 139
+    C337 155 327 170 312 174
+    L306 194
+    L215 194
+    Z"
+    fill="#FFFFFF"
+    stroke="#57408F"
+    stroke-width="8"
+    stroke-linejoin="round"/>
+
+  <!-- Сердце -->
+  <path d="
+    M260 169
+    C247 158 229 143 229 130
+    C229 119 238 112 248 112
+    C255 112 260 117 263 122
+    C267 117 272 112 280 112
+    C290 112 299 119 299 130
+    C299 143 280 158 260 169Z"
+    fill="#FF8B7B"/>
+
+  <!-- ШП -->
+  <text
+    x="256"
+    y="305"
+    text-anchor="middle"
+    font-family="Arial, sans-serif"
+    font-size="118"
+    font-weight="900"
+    fill="#57408F">ШП</text>
+
+  <!-- 5 класс -->
+  <rect x="163" y="325" width="186" height="54" rx="27" fill="#E9DFFF"/>
+
+  <text
+    x="256"
+    y="362"
+    text-anchor="middle"
+    font-family="Arial, sans-serif"
+    font-size="31"
+    font-weight="700"
+    fill="#57408F">5 класс</text>
+
+  <!-- Вилка -->
+  <path d="M91 175 V285
+           M75 175 V235
+           M107 175 V235
+           M123 175 V235
+           M75 235
+           C75 260 123 260 123 235
+           M99 255 V380"
+        fill="none"
+        stroke="#FFFFFF"
+        stroke-width="13"
+        stroke-linecap="round"/>
+
+  <!-- Ложка -->
+  <ellipse cx="414" cy="215" rx="34" ry="48" fill="#FFFFFF"/>
+  <rect x="407" y="250" width="14" height="132" rx="7" fill="#FFFFFF"/>
+
+  <!-- Листочки -->
+  <ellipse cx="215" cy="408" rx="48" ry="22"
+           transform="rotate(30 215 408)"
+           fill="#73B94D"/>
+
+  <ellipse cx="292" cy="410" rx="48" ry="22"
+           transform="rotate(-30 292 410)"
+           fill="#8BCF5A"/>
+
+  <path d="M208 408 Q255 425 303 407"
+        fill="none"
+        stroke="#4F9637"
+        stroke-width="7"
+        stroke-linecap="round"/>
+
 </svg>
