@@ -1637,6 +1637,10 @@ let accessCode =
   studentSnap.data().accessCode || "";
        if(!accessCode){
 
+let codeIsUnique = false;
+
+while(!codeIsUnique){
+
   accessCode =
     String(
       Math.floor(
@@ -1644,13 +1648,28 @@ let accessCode =
       )
     );
 
-  await setDoc(
-    studentRef,
-    {
-      accessCode: accessCode
-    },
-    { merge: true }
-  );
+  const codeQuery =
+    query(
+      collection(db, "students"),
+      where("accessCode", "==", accessCode)
+    );
+
+  const codeSnapshot =
+    await getDocs(codeQuery);
+
+  if(codeSnapshot.empty){
+    codeIsUnique = true;
+  }
+
+}
+
+await setDoc(
+  studentRef,
+  {
+    accessCode: accessCode
+  },
+  { merge: true }
+);
 
 }
 
