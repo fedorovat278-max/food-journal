@@ -766,6 +766,60 @@ button:active{
   }
 
 }
+    /* ===== УЧИТЕЛЬ: ЗАКАЗ ДЛЯ СТОЛОВОЙ ===== */
+
+#cafeteriaSummary{
+  margin-top:12px;
+  padding:16px;
+
+  background:#f8f9fc;
+  border:1px solid #e3e7ef;
+  border-radius:14px;
+
+  font-size:16px;
+  line-height:1.45;
+}
+
+/* строки внутри итоговой заявки */
+
+#cafeteriaSummary > div{
+  padding:10px 0;
+  border-bottom:1px solid #e5e7ef;
+}
+
+#cafeteriaSummary > div:last-child{
+  border-bottom:none;
+}
+
+/* выделяем итоговые числа */
+
+#cafeteriaSummary b,
+#cafeteriaSummary strong{
+  color:#202938;
+}
+
+/* блок "Заказ для столовой" */
+
+#teacherPanel .card:has(#cafeteriaSummary){
+  border:1px solid #ddd3ef;
+  background:#ffffff;
+  box-shadow:0 6px 18px rgba(118,93,168,.07);
+}
+
+#teacherPanel .card:has(#cafeteriaSummary) h2{
+  color:#5f4a91;
+}
+
+/* телефон */
+
+@media (max-width:520px){
+
+  #cafeteriaSummary{
+    padding:12px;
+    font-size:15px;
+  }
+
+}
   </style>
 </head>
 
