@@ -1603,7 +1603,37 @@ $("studentNameShown").textContent =
 
 $("studentLoggedIn")
   .classList.remove("hidden");
-    
+  const startingBalance =
+  Number(myStudent.balance || 0);
+
+const myOrdersSnap =
+  await getDocs(
+    query(
+      collection(db, "orders"),
+      where("authUid", "==", currentStudentUID)
+    )
+  );
+
+let spent = 0;
+
+myOrdersSnap.forEach(orderDoc => {
+
+  const order =
+    orderDoc.data();
+
+  if(order.status === "confirmed"){
+    spent += Number(order.total || 0);
+  }
+
+});
+
+balance =
+  Math.max(startingBalance - spent, 0);
+
+$("studentBalance").textContent =
+  "💰 Баланс: " +
+  balance.toLocaleString("ru-RU") +
+  " ₸";  
     showMessage(
       $("studentLoginMsg"),
       "Вход выполнен.",
