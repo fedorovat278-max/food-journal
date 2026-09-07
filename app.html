@@ -1345,9 +1345,9 @@ function localDate(offsetDays = 0){
 }
 
 
-$("studentDate").value = localDate(1);
-$("teacherDate").value = localDate(1);
-$("ordersDate").value = localDate(1);
+$("studentDate").value = localDate(0);
+$("teacherDate").value = localDate(0);
+$("ordersDate").value = localDate(0);
 
 $("studentName").value =
   localStorage.getItem("foodStudentName") || "";
