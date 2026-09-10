@@ -2865,7 +2865,16 @@ $("balanceAfterOrder").textContent =
   return total;
 }
 $("sendOrderBtn").onclick = async () => {
+const today = localDate(0);
 
+if(date !== today){
+  showMessage(
+    $("studentStatus"),
+    "Заказ можно оформить только на сегодня.",
+    "warn"
+  );
+  return;
+}
   const name =
     $("studentName").value.trim();
 
