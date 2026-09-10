@@ -907,7 +907,7 @@ button:active{
   💰 Баланс: — ₸
 </div>
       <label>Дата питания</label>
-     <input id="studentDate" type="date" disabled>
+      <input id="studentDate" type="date">
 
       <button id="loadMenuBtn" style="margin-top:12px">
         Показать меню
@@ -1082,18 +1082,7 @@ button:active{
     <input type="number" class="menu-price" value="903.84" min="0" step="0.01">
     <span>₸</span>
   </div>
-<div style="margin:8px 0 16px 34px;">
-  <label for="hotMealDescription">
-    <b>🍲 Состав горячего питания</b>
-  </label>
-  
-  <textarea
-    id="hotMealDescription"
-    rows="4"
-    placeholder="Например: суп, картофельное пюре, котлета, хлеб, напиток"
-    style="width:100%; margin-top:6px;"
-  ></textarea>
-</div>
+
   <div class="menu-item-row">
     <label>
       <input type="checkbox" class="menu-enabled" checked>
@@ -2767,29 +2756,18 @@ function renderStudentMenu(){
     const div = document.createElement("div");
 
     div.className = "menu-item";
-  div.innerHTML = `
-  <div>
-  <div class="dish-name">
-  <div>
-    <div class="dish-name">
-   <div class="dish-name">
-  ${escapeHtml(item.name)}
-</div>
-</div>
-    </div>
 
-    ${item.name === "Горячее питание" && currentMenu.hotMealDescription ? `
-      <div class="small" style="margin-top:6px; white-space:pre-line;">
-        🍲 ${escapeHtml(currentMenu.hotMealDescription)}
+    div.innerHTML = `
+      <div>
+        <div class="dish-name">
+          ${escapeHtml(item.name)}
+        </div>
+
+        <div class="price">
+          ${money(item.price)}
+        </div>
       </div>
-    ` : ""}
 
-    <div class="price">
-      ${money(item.price)}
-    </div>
-  </div>
-
-  <select data-index="${index}">
       <select data-index="${index}">
         <option value="0">0</option>
         <option value="1">1 шт.</option>
@@ -2894,79 +2872,42 @@ $("sendOrderBtn").onclick = async () => {
   const date =
     $("studentDate").value;
 
-  const today = localDate(0);
-
-  if(date !== today){
-    showMessage(
-      $("studentStatus"),
-      "Заказ можно оформить только на сегодня.",
-      "warn"
-    );
-    return;
-  }
-
   const items =
     selectedItems();
 
   const total =
     calculateStudentTotal();
+if(total > balance){
 
-  if(total > balance){
-    showMessage(
-      $("studentStatus"),
-      "Недостаточно средств на балансе.",
-      "warn"
-    );
-    return;
-  }
+  showMessage(
+    $("studentStatus"),
+    "Недостаточно средств на балансе.",
+    "warn"
+  );
+
+  return;
+}
 
   if(!items.length){
+
     showMessage(
       $("studentStatus"),
       "Выберите хотя бы одну позицию.",
       "warn"
     );
+
     return;
   }
 
-  const orderButton =
-    $("sendOrderBtn");
-
-  if(orderButton.dataset.submitting === "1"){
-    return;
-  }
-
-  orderButton.dataset.submitting = "1";
-  orderButton.disabled = true;
-  orderButton.textContent =
-    "⏳ Отправляем заказ...";
 
   try{
+
     const user =
       await ensureStudentAuth();
 
     const orderId =
       `${date}_${user.uid}`;
-    const existingOrder =
-  await getDoc(
-    doc(db, "orders", orderId)
-  );
 
-if(
-  existingOrder.exists() &&
-  existingOrder.data().status === "confirmed"
-){
-  showMessage(
-    $("studentStatus"),
-    "✅ Ваш заказ на сегодня уже оформлен.",
-    "ok"
-  );
-
-  orderButton.textContent =
-    "✅ Заказ уже оформлен";
-
-  return;
-}
     await setDoc(
       doc(db,"orders",orderId),
       {
@@ -3008,16 +2949,12 @@ document.getElementById("balanceAfterOrder").textContent =
       "Заказ отправлен учителю.",
       "ok"
     );
-orderButton.textContent =
-  "✅ Заказ оформлен";
+
 
   }catch(err){
 
     console.error(err);
-orderButton.dataset.submitting = "0";
-orderButton.disabled = false;
-orderButton.textContent =
-  "Подтвердить заказ";
+
     showMessage(
       $("studentStatus"),
       "Не удалось сохранить заказ.",
