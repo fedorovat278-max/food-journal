@@ -2876,58 +2876,106 @@ $("balanceAfterOrder").textContent =
   return total;
 }
 $("sendOrderBtn").onclick = async () => {
-const today = localDate(0);
 
-if(date !== today){
-  showMessage(
-    $("studentStatus"),
-    "Заказ можно оформить только на сегодня.",
-    "warn"
-  );
-  return;
-}
   const name =
     $("studentName").value.trim();
 
   const date =
     $("studentDate").value;
 
+  const today = localDate(0);
+
+  if(date !== today){
+    showMessage(
+      $("studentStatus"),
+      "Заказ можно оформить только на сегодня.",
+      "warn"
+    );
+    return;
+  }
+
   const items =
     selectedItems();
 
   const total =
     calculateStudentTotal();
-if(total > balance){
 
-  showMessage(
-    $("studentStatus"),
-    "Недостаточно средств на балансе.",
-    "warn"
-  );
-
-  return;
-}
+  if(total > balance){
+    showMessage(
+      $("studentStatus"),
+      "Недостаточно средств на балансе.",
+      "warn"
+    );
+    return;
+  }
 
   if(!items.length){
-
     showMessage(
       $("studentStatus"),
       "Выберите хотя бы одну позицию.",
       "warn"
     );
-
     return;
   }
 
+  const orderButton =
+    $("sendOrderBtn");
+
+  if(orderButton.dataset.submitting === "1"){
+    return;
+  }
+
+  orderButton.dataset.submitting = "1";
+  orderButton.disabled = true;
+  orderButton.textContent =
+    "⏳ Отправляем заказ...";
 
   try{
-
     const user =
       await ensureStudentAuth();
 
     const orderId =
       `${date}_${user.uid}`;
+    const existingOrder =
+  await getDoc(
+    doc(db, "orders", orderId)
+  );
 
+if(
+  existingOrder.exists() &&
+  existingOrder.data().status === "confirmed"
+){
+  showMessage(
+    $("studentStatus"),
+    "✅ Ваш заказ на сегодня уже оформлен.",
+    "ok"
+  );
+
+  orderButton.textContent =
+    "✅ Заказ уже оформлен";
+
+  return;
+}
+const existingOrder =
+  await getDoc(
+    doc(db, "orders", orderId)
+  );
+
+if(
+  existingOrder.exists() &&
+  existingOrder.data().status === "confirmed"
+){
+  showMessage(
+    $("studentStatus"),
+    "✅ Ваш заказ на сегодня уже оформлен.",
+    "ok"
+  );
+
+  orderButton.textContent =
+    "✅ Заказ уже оформлен";
+
+  return;
+}
     await setDoc(
       doc(db,"orders",orderId),
       {
@@ -2974,7 +3022,10 @@ document.getElementById("balanceAfterOrder").textContent =
   }catch(err){
 
     console.error(err);
-
+orderButton.dataset.submitting = "0";
+orderButton.disabled = false;
+orderButton.textContent =
+  "Подтвердить заказ";
     showMessage(
       $("studentStatus"),
       "Не удалось сохранить заказ.",
