@@ -2956,26 +2956,6 @@ if(
 
   return;
 }
-const existingOrder =
-  await getDoc(
-    doc(db, "orders", orderId)
-  );
-
-if(
-  existingOrder.exists() &&
-  existingOrder.data().status === "confirmed"
-){
-  showMessage(
-    $("studentStatus"),
-    "✅ Ваш заказ на сегодня уже оформлен.",
-    "ok"
-  );
-
-  orderButton.textContent =
-    "✅ Заказ уже оформлен";
-
-  return;
-}
     await setDoc(
       doc(db,"orders",orderId),
       {
