@@ -2767,18 +2767,29 @@ function renderStudentMenu(){
     const div = document.createElement("div");
 
     div.className = "menu-item";
+  div.innerHTML = `
+  <div>
+  <div class="dish-name">
+  <div>
+    <div class="dish-name">
+   <div class="dish-name">
+  ${escapeHtml(item.name)}
+</div>
+</div>
+    </div>
 
-    div.innerHTML = `
-      <div>
-        <div class="dish-name">
-          ${escapeHtml(item.name)}
-        </div>
-
-        <div class="price">
-          ${money(item.price)}
-        </div>
+    ${item.name === "Горячее питание" && currentMenu.hotMealDescription ? `
+      <div class="small" style="margin-top:6px; white-space:pre-line;">
+        🍲 ${escapeHtml(currentMenu.hotMealDescription)}
       </div>
+    ` : ""}
 
+    <div class="price">
+      ${money(item.price)}
+    </div>
+  </div>
+
+  <select data-index="${index}">
       <select data-index="${index}">
         <option value="0">0</option>
         <option value="1">1 шт.</option>
